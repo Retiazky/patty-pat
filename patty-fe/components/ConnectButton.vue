@@ -2,7 +2,7 @@
   <s-dialog v-if="!isConnected">
     <s-dialog-trigger as-child>
       <s-button
-        class="border border-foreground h-14 text-xl rounded-xl"
+        class="border border-foreground h-12 text-xl rounded-xl m-2"
         variant="secondary"
       >
         Connect your wallet
