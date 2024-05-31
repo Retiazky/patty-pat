@@ -4,7 +4,7 @@
       <voting-card v-for="proposal in proposals" :proposal="proposal" />
     </div>
     <span
-      class="rounded-full absolute bottom-8 right-4 border cursor-pointer p-2 bg-white shadow-md hover:bg-accent/80"
+      class="fixed rounded-full bottom-8 right-4 border cursor-pointer p-2 shadow-md hover:bg-accent/80"
       @click="$router.push('/proposals/create')"
     >
       <icon name="mdi:plus" size="48" />
