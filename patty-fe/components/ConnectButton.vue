@@ -1,10 +1,7 @@
 <template>
   <s-dialog v-if="!isConnected">
     <s-dialog-trigger as-child>
-      <s-button
-        class="border border-foreground h-12 text-xl rounded-xl m-2"
-        variant="secondary"
-      >
+      <s-button class="border h-10 rounded-xl m-2">
         Connect your wallet
       </s-button>
     </s-dialog-trigger>
@@ -17,7 +14,6 @@
           v-for="connector in displayedConnectors"
           :key="connector.id"
           class="mb-2"
-          variant="secondary"
           @click="connectWallet(connector)"
         >
           {{ connector.name }}
@@ -26,12 +22,7 @@
     </s-dialog-content>
   </s-dialog>
 
-  <s-button
-    v-else
-    class="border border-foreground w-full m-2"
-    variant="secondary"
-    @click="disconnectWallet"
-  >
+  <s-button v-else class="border h-10 rounded-xl m-2" @click="disconnectWallet">
     Disconnect
   </s-button>
 </template>
