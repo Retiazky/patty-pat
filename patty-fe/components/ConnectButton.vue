@@ -1,10 +1,7 @@
 <template>
   <s-dialog v-if="!isConnected">
     <s-dialog-trigger as-child>
-      <s-button
-        class="border border-foreground h-14 text-xl rounded-xl"
-        variant="secondary"
-      >
+      <s-button class="border h-10 rounded-xl m-2">
         Connect your wallet
       </s-button>
     </s-dialog-trigger>
@@ -17,7 +14,6 @@
           v-for="connector in displayedConnectors"
           :key="connector.id"
           class="mb-2"
-          variant="secondary"
           @click="connectWallet(connector)"
         >
           {{ connector.name }}
@@ -26,19 +22,14 @@
     </s-dialog-content>
   </s-dialog>
 
-  <s-button
-    v-else
-    class="border border-foreground w-full m-2"
-    variant="secondary"
-    @click="disconnectWallet"
-  >
+  <s-button v-else class="border h-10 rounded-xl m-2" @click="disconnectWallet">
     Disconnect
   </s-button>
 </template>
 
 <script lang="ts" setup>
-import type { Connector } from "@wagmi/vue";
-import { useAccount, useConnect, useDisconnect } from "@wagmi/vue";
+import type { Connector } from '@wagmi/vue';
+import { useAccount, useConnect, useDisconnect } from '@wagmi/vue';
 
 const { isConnected } = useAccount();
 
@@ -47,16 +38,16 @@ const { connect, connectors } = useConnect();
 
 const disconnectWallet = () => {
   disconnect();
-  useRouter().push("/");
+  useRouter().push('/');
 };
 
 const connectWallet = (connector: Connector) => {
   connect({ connector });
-  useRouter().push("/home");
+  useRouter().push('/home');
 };
 
 const displayedConnectors = computed(() => {
-  return connectors.filter((connector) => connector.id !== "injected");
+  return connectors.filter((connector) => connector.id !== 'injected');
 });
 </script>
 

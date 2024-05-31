@@ -1,6 +1,6 @@
 <template>
   <footer class="w-full bg-accent flex justify-center items-center">
-    Retiazky@ETHPrague
+    Pedro@ETHPrague
   </footer>
 </template>
 

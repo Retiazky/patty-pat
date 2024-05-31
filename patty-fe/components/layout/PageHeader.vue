@@ -29,13 +29,13 @@
 </template>
 
 <script lang="ts" setup>
-import PageNavigation from "@/components/layout/PageNavigation.vue";
-import { Icon } from "@iconify/vue";
+import PageNavigation from '@/components/layout/PageNavigation.vue';
+import { Icon } from '@iconify/vue';
 
 const colorMode = useColorMode();
-colorMode.preference = "light";
+colorMode.preference = 'light';
 const toggleColorMode = () => {
-  colorMode.preference = colorMode.preference === "light" ? "dark" : "light";
+  colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light';
 };
 </script>
 
