@@ -12,5 +12,3 @@
 import PageFooter from "@/components/layout/PageFooter.vue";
 import PageHeader from "@/components/layout/PageHeader.vue";
 </script>
-
-<style></style>

@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxtjs/color-mode",
     "nuxt-icon",
+    "nuxt-tradingview",
   ],
   shadcn: {
     /**
@@ -22,5 +23,8 @@ export default defineNuxtConfig({
   },
   colorMode: {
     classSuffix: "",
+  },
+  tradingview: {
+    prefix: "tv",
   },
 });
