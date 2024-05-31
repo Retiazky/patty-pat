@@ -13,23 +13,8 @@
 </template>
 <script setup lang="ts">
 import type { Proposal } from '~/types';
+import { useProposalService } from '~/server/services';
 
-const proposals: Proposal[] = [
-  {
-    title: 'Proposal 1',
-    description: 'Description 1',
-    minAmount: 100,
-    imageSrc: 'img/prop_cat.png',
-    votes: 0,
-    endingDateTime: '2024-08-31 12:00',
-  },
-  {
-    title: 'Proposal 2',
-    description: 'Description 2',
-    minAmount: 200,
-    imageSrc: 'img/prop_dino.png',
-    votes: 0,
-    endingDateTime: '2024-08-31 13:00',
-  },
-];
+const service = useProposalService();
+const proposals: Proposal[] = service.getProposals();
 </script>

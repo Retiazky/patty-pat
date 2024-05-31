@@ -1,8 +1,14 @@
 <template>
-  <div class="flex flex-col">
-    <h1>Home</h1>
-    <nuxt-link to="/funding/1">Go to funding 1</nuxt-link>
-    <nuxt-link to="/funding/2">Go to funding 2</nuxt-link>
-    <nuxt-link to="/funding/3">Go to funding 3</nuxt-link>
+  <div>
+    <div class="flex flex-col gap-10 items-center">
+      <funding-card v-for="funding in fundings" :funding="funding" />
+    </div>
   </div>
 </template>
+<script setup lang="ts">
+import type { Funding } from '~/types';
+import { useFundingService } from '~/server/services';
+
+const service = useFundingService();
+const fundings: Funding[] = service.getFundings();
+</script>
