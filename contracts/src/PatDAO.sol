@@ -30,7 +30,8 @@ contract PatDAO is IPatDAO {
         uint256 supply
     ) public onlyGovernance {
         // TODO: Implement
-        emit CampaingCreated(name, symbol, uri, supply);
+        address token = address(0);
+        emit CampaingCreated(name, symbol, uri, supply, token);
     }
 
     function createBuyback(address token, uint256 amountIn, uint256 amountOut) public onlyGovernance {

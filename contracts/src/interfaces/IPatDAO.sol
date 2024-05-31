@@ -13,7 +13,8 @@ event CampaingCreated(
     string name,
     string symbol,
     string uri,
-    uint256 supply
+    uint256 supply,
+    address token
 );
 
 event BuybackCreated(
