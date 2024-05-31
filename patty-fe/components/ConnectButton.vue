@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { Connector } from '@wagmi/vue';
-import { useAccount, useConnect, useDisconnect } from '@wagmi/vue';
+import type { Connector } from "@wagmi/vue";
+import { useAccount, useConnect, useDisconnect } from "@wagmi/vue";
 
 const { isConnected } = useAccount();
 
@@ -38,16 +38,16 @@ const { connect, connectors } = useConnect();
 
 const disconnectWallet = () => {
   disconnect();
-  useRouter().push('/');
+  useRouter().push("/");
 };
 
 const connectWallet = (connector: Connector) => {
   connect({ connector });
-  useRouter().push('/home');
+  useRouter().push("/home");
 };
 
 const displayedConnectors = computed(() => {
-  return connectors.filter((connector) => connector.id !== 'injected');
+  return connectors.filter((connector) => connector.id !== "injected");
 });
 </script>
 
