@@ -3,6 +3,7 @@ export interface GraphQLResponse<T> {
 }
 
 export type Proposal = {
+  id: string;
   title: string;
   description: string;
   imageSrc: string;
@@ -12,6 +13,7 @@ export type Proposal = {
 };
 
 export type Funding = {
+  id: string;
   title: string;
   imageSrc: string;
   description: string;

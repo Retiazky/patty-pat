@@ -10,7 +10,12 @@
       </div>
     </s-card-content>
     <s-card-footer class="flex">
-      <s-button class="flex-1 border-2" variant="success">Support</s-button>
+      <s-button
+        class="flex-1 border-2"
+        variant="success"
+        @click="$router.push('/funding/1')"
+        >Support</s-button
+      >
     </s-card-footer>
   </s-card>
 </template>
