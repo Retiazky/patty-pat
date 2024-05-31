@@ -14,7 +14,8 @@ event CampaingCreated(
     string symbol,
     string uri,
     uint256 supply,
-    address token
+    address token,
+    address feeRecipient,
 );
 
 event BuybackCreated(
