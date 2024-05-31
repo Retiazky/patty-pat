@@ -10,3 +10,9 @@ export type Proposal = {
   minAmount: number;
   votes: number;
 };
+
+export type Funding = {
+  title: string;
+  imageSrc: string;
+  description: string;
+};
