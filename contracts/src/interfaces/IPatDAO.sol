@@ -15,7 +15,7 @@ event CampaingCreated(
     string uri,
     uint256 supply,
     address token,
-    address feeRecipient,
+    address feeRecipient
 );
 
 event BuybackCreated(
@@ -29,6 +29,7 @@ interface IPatDAO {
         string memory name,
         string memory symbol,
         string memory uri,
+        address feeRecipient,
         uint256 supply
     ) external;
 
