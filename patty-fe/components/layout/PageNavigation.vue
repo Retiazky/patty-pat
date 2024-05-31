@@ -18,7 +18,11 @@ interface NavigationLink {
   label: string;
 }
 
-const NAVIGATION: NavigationLink[] = [{ to: "/home", label: "Home" }];
+const NAVIGATION: NavigationLink[] = [
+  { to: "/home", label: "Home" },
+  { to: "/proposals", label: "Proposals" },
+  { to: "/profile", label: "Profile" },
+];
 </script>
 
 <style></style>

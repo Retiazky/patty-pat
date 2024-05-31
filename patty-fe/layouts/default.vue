@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full flex flex-col">
     <page-header />
-    <main class="h-full flex-1">
+    <main class="h-full flex-1 p-4 pt-8">
       <slot />
     </main>
     <page-footer />
