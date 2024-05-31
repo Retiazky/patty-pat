@@ -1,0 +1,41 @@
+{
+  "name": "patty-pat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^0.3.12",
+    "@tanstack/vue-query": "^5.35.2",
+    "@vee-validate/zod": "^4.12.8",
+    "@vueuse/core": "^10.9.0",
+    "@wagmi/vue": "^0.0.11",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.378.0",
+    "nuxt": "^3.11.2",
+    "radix-vue": "^1.7.4",
+    "shadcn-nuxt": "^0.10.4",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul-vue": "^0.1.2",
+    "vee-validate": "^4.12.8",
+    "viem": "^2.10.3",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@iconify-json/radix-icons": "^1.1.14",
+    "@iconify/vue": "^4.1.2",
+    "@metamask/sdk": "^0.20.3",
+    "@nuxtjs/color-mode": "^3.4.1",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "typescript": "^5.4.5"
+  }
+}
