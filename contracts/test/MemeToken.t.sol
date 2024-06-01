@@ -10,11 +10,14 @@ contract MemeTokenTest is Test {
     function setUp() public {
         address initialOwner = vm.addr(1);
         console.log("Initial owner: %s", initialOwner);
-        token = new MemeToken(initialOwner, "CatWithCoco", "CWC");
+        token = new MemeToken(initialOwner, "CatWithCoco", "CWC", "/");
     }
 
     function testSupply() public {
-        assertEq(token.totalSupply(), 10000000000000000 * 10 ** token.decimals());
+        assertEq(
+            token.totalSupply(),
+            10000000000000000 * 10 ** token.decimals()
+        );
     }
 }
 
