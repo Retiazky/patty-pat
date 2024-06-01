@@ -9,12 +9,14 @@ import {IPoolManager} from "@v4-core/interfaces/IPoolManager.sol";
 import {IHooks} from "@v4-core/interfaces/IHooks.sol";
 import {PoolModifyLiquidityTest} from "@v4-core/test/PoolModifyLiquidityTest.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {StateLibrary} from "@v4-core/libraries/StateLibrary.sol";
 
 contract PatTest is Test {
     PatPool public pool;
     PoolModifyLiquidityTest public lpRouter;
     IPoolManager public manager;
     PoolKey public poolKey;
+    using StateLibrary for IPoolManager;
 
     function setUp() public {
         address initialOwner = vm.addr(1);
