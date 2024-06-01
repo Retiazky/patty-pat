@@ -1,7 +1,7 @@
 //import event class from generated files
 import {Transfer} from "../generated/Token/ERC20"
 //import entities
-import {TokenBalance} from "../generated/schema"
+import {TokenBalance, TokenTransfer} from "../generated/schema"
 //import the functions defined in utils.ts
 import {
   fetchTokenDetails,
@@ -39,4 +39,14 @@ export function handleTokenTransfer(event: Transfer): void {
     if(toTokenBalance.amount != BigDecimal.fromString("0")){
       toTokenBalance.save();
     }
+
+	let transfer = new TokenTransfer(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+	transfer.token = token.id;
+	transfer.from = fromAddress;
+	transfer.to = toAddress;
+	transfer.amount = event.params.value.toBigDecimal();
+	transfer.blockNumber = event.block.number;
+	transfer.timestamp = event.block.timestamp;
+	transfer.transactionHash = event.transaction.hash;
+	transfer.save();
 }

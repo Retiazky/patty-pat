@@ -1,6 +1,8 @@
 import { useProposalService } from '../../services';
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   const service = useProposalService();
-  return await service.getProposals();
+  const address = getQuery(event).address as string;
+
+  return await service.getProposals(address);
 });
