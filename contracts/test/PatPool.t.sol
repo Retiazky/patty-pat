@@ -42,8 +42,8 @@ contract PatTest is Test {
 
         // floor(sqrt(1) * 2^96)
 //        uint160 startingPrice = 792281625142643375935439503360;
-//        uint160 startingPrice = 7922816251426433759354395033600;
-        uint160 startingPrice = 112045541949572279837463876454;
+        uint160 startingPrice = 7922816251426433759354395033600;
+//        uint160 startingPrice = 112045541949572279837463876454;
 
         // hookless pool doesnt expect any initialization data
         bytes memory hookData = new bytes(0);

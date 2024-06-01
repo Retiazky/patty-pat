@@ -54,7 +54,7 @@ contract PatDAO is IPatDAO {
     ) public onlyGovernance {
         // TODO: Implement
 
-        manager = IPoolManager(address(0x4abee8d464c1d7367cf31b264344b655cf577f0f));
+        manager = IPoolManager(address(0x43E62b5c46884f439d4d2b7c3f47fBAff06D0551));
 
         lpRouter = new PoolModifyLiquidityTest(manager);
 
