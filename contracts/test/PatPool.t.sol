@@ -27,7 +27,7 @@ contract PatTest is Test {
     function setUp() public {
         address initialOwner = vm.addr(1);
         console.log("Initial owner: %s", initialOwner);
-        pool = new PatPool();
+        pool = new PatPool(500000);
         PoolManager deployedManager = new PoolManager(500000);
         manager = IPoolManager(address(deployedManager));
 
