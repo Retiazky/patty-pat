@@ -1,0 +1,2 @@
+export const DAO_ADDRESS = "0x9faadc839130fa7a7aeb28a881b58175930585c9";
+export const PAT_TOKEN = "0xb17c316f9fc551211f3086bb24f047f50ae35af5"
