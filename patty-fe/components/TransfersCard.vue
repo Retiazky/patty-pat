@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useFundingService } from '~/server/services';
+import type { Transfer } from '~/types';
 
 defineProps<{
   tokenName: string | undefined;
@@ -41,7 +41,10 @@ defineProps<{
 
 const { params } = useRoute();
 const fundingId = params.id as string;
+const transfers = ref<Transfer[]>([]);
 
-const service = useFundingService();
-const transfers = service.getTransfersById(fundingId);
+onMounted(async () => {
+  const data: Transfer[] = await $fetch('/api/transfer/' + fundingId);
+  transfers.value = data;
+});
 </script>
