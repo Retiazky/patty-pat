@@ -28,6 +28,7 @@ export type Transfer = {
   type: 'buy' | 'sell';
   eth: number;
   token: number;
+  tokenSymbol: string;
   date: string;
   transaction: string;
 };

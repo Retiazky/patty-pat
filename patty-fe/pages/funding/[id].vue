@@ -4,17 +4,21 @@
       :tokenName="funding?.tokenName"
       :tokenSymbol="funding?.tokenSymbol"
     />
-    <transfers-card :tokenName="funding?.tokenName" />
+    <trades-table-card :transfers="transfers" />
   </div>
 </template>
 <script setup lang="ts">
-import type { Funding } from '~/types';
+import type { Funding, Transfer } from '~/types';
 const { params } = useRoute();
 
 const funding = ref<Funding | null>(null);
+const transfers = ref<Transfer[]>([]);
 
 onMounted(async () => {
-  const data: Funding = await $fetch('/api/funding/' + params.id);
-  funding.value = data;
+  const fun: Funding = await $fetch('/api/funding/' + params.id);
+  funding.value = fun;
+
+  const trans: Transfer[] = await $fetch('/api/transfer/' + fun.id);
+  transfers.value = trans;
 });
 </script>
