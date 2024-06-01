@@ -63,6 +63,8 @@ contract PatTest is Test {
         //        IERC20(token0).approve(address(lpRouter), type(uint256).max);
         vm.prank(initialOwner);
         IERC20(token1).approve(address(lpRouter), type(uint256).max);
+        //vm.prank(initialOwner);
+        //IERC20(token1).approve(address(swapRouter), type(uint256).max);
     }
 
     function testLiquidity() public {
@@ -74,7 +76,7 @@ contract PatTest is Test {
         uint160 MIN_PRICE_LIMIT = TickMath.MIN_SQRT_PRICE + 1;
         uint160 MAX_PRICE_LIMIT = TickMath.MAX_SQRT_PRICE - 1;
 
-        PoolSwapTest swapRouter = PoolSwapTest(vm.addr(1));
+        PoolSwapTest swapRouter = new PoolSwapTest(manager);
 
         vm.prank(vm.addr(1));
         BalanceDelta result = lpRouter.modifyLiquidity{value: 10 ether}(
@@ -105,11 +107,13 @@ contract PatTest is Test {
         bool zeroForOne = true;
         IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
             zeroForOne: zeroForOne,
-            amountSpecified: 2 ether,
-            sqrtPriceLimitX96: 112045541949572279837463876454 - 91239123// unlimited impact
+            amountSpecified: -0.0001 ether,
+            sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT// unlimited impact
         });
         PoolSwapTest.TestSettings memory testSettings =
-            PoolSwapTest.TestSettings(true, true);
+            PoolSwapTest.TestSettings(false, false);
+
+    
 
         bytes memory hookData = new bytes(0);
         //        vm.prank(vm.addr(1));
@@ -118,7 +122,7 @@ contract PatTest is Test {
         //        IERC20(zeroForOne ? Currency.unwrap(poolKey.currency1) : Currency.unwrap(poolKey.currency0)).approve(address(swapRouter), type(uint256).max);
         vm.deal(address(manager), 1000 ether);
         vm.prank(vm.addr(1));
-        swapRouter.swap{value: 10 ether}(poolKey, params, testSettings, hookData);
+        swapRouter.swap{value: 0.0001 ether}(poolKey, params, testSettings, hookData);
 
         //        console.log("swapRouter: %s", );
 
