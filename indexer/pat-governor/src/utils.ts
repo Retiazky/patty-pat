@@ -12,29 +12,38 @@ export function fetchTokenDetails(event: ethereum.Event): Token | null {
     token = new Token(event.address.toHex());
     token.name = "N/A";
     token.symbol = "N/A";
+	token.totalSupply = BigDecimal.fromString("0");
     token.decimals = BigDecimal.fromString("0");
     let erc20 = ERC20.bind(event.address);
 
-		const owner = erc20.try_owner();
+	const owner = erc20.try_owner();
 
-		if (!owner.reverted) {
-			return null;
-		}
+	if (owner.reverted) {
+		token.save();
+		return token;
+	}
 
-		if (owner.value != Address.fromString(DAO_ADDRESS) || event.address != Address.fromString(PAT_TOKEN)) {
-			return null;
-		}
+	if (owner.value != Address.fromString(DAO_ADDRESS) && event.address.toHex().toLowerCase() != PAT_TOKEN) {
+		token.symbol = event.address.toHex();
+		token.save();
+		return token;
+	}
 
-	    let tokenName = erc20.try_name();
-	    if (!tokenName.reverted) {
-	      token.name = tokenName.value;
-	    }
+	let tokenName = erc20.try_name();
+	if (!tokenName.reverted) {
+		token.name = tokenName.value;
+	}
 
     //fetch symbol
     let tokenSymbol = erc20.try_symbol();
     if (!tokenSymbol.reverted) {
       token.symbol = tokenSymbol.value;
     }
+
+	let tokenURI = erc20.try_tokenURI();
+	if (!tokenURI.reverted) {
+		token.uri = tokenURI.value;
+	}
 
     //fetch decimals
     let tokenDecimal = erc20.try_decimals();

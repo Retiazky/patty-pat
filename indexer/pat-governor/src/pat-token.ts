@@ -12,14 +12,12 @@ import { BigDecimal} from "@graphprotocol/graph-ts";
 
 export function handleTokenTransfer(event: Transfer): void {
     let token = fetchTokenDetails(event);
-    if (!token) { //if token == null
-        return
-      }
+    if (!token || token.name == 'N/A') {
+    	return
+    }
     let fromAddress = event.params.from;
     let toAddress = event.params.to;
 
-
-    //setting the token balance of the 'from' account
     let fromTokenBalance = TokenBalance.load(token.id + "-" + fromAddress.toHex());
     if (!fromTokenBalance) {
           fromTokenBalance = new TokenBalance(token.id + "-" + fromAddress.toHex());

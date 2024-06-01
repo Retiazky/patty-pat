@@ -21,6 +21,7 @@ type Token @entity {
   symbol: String!
   totalSupply: BigDecimal!
   decimals: BigDecimal!
+  uri: String
 }
 
 type TokenBalance @entity {
