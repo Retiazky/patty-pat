@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: PatGovernor
-    network: linea-sepolia
+    network: base-sepolia
     source:
-      address: "0xDFAc8F04f85a85F513E813A33CB16B155e6BfcCb"
+      address: "0x1160ada21fb26f20727d2e04d1dd005019df2d9a"
       abi: PatGovernor
-      startBlock: 1298828
+      startBlock: 10740637
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
