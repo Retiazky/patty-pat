@@ -15,3 +15,20 @@ export default `query GetProposals {
     voteStart
   }
 }`;
+export const queryByAddress = `query GetProposals($address: String!) {
+  proposals(where: {proposer: $address}) {
+    abstain
+    against
+    calldatas
+    canceled
+    executed
+    description
+    for
+    id
+    proposer
+    targets
+    values
+    voteEnd
+    voteStart
+  }
+}`;
