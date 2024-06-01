@@ -1,6 +1,6 @@
 type Proposal @entity {
 	id: ID!
-	proposer: String! @index
+	proposer: Bytes! @index
 	description: String!
 	against: BigInt!
 	for: BigInt!
@@ -11,6 +11,22 @@ type Proposal @entity {
 	executed: Boolean!
 	canceled: Boolean!
 	targets: [String!]
-	values: [String!]
-	calldatas: [String!]
+	values: [BigInt!]
+	calldatas: [Bytes!]
 }
+
+type Token @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  totalSupply: BigDecimal!
+  decimals: BigDecimal!
+}
+
+type TokenBalance @entity {
+  id: ID!
+  token: Token!
+  account: Bytes!
+  amount: BigDecimal!
+}
+

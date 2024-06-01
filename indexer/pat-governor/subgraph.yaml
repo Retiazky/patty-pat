@@ -32,3 +32,24 @@ dataSources:
         - event: VoteCastWithParams(indexed address,uint256,uint8,uint256,string,bytes)
           handler: handleVoteCast
       file: ./src/pat-governor.ts
+  - kind: ethereum
+    name: Token
+    network: base-sepolia
+    source:
+      address: "0xB17C316f9FC551211f3086BB24f047f50ae35AF5"
+      abi: ERC20
+      startBlock: 10740637
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - TokenAccount
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTokenTransfer
+      file: ./src/pat-token.ts
