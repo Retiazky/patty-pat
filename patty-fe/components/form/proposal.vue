@@ -21,6 +21,31 @@
             <s-form-message />
           </s-form-item>
         </s-form-field>
+        <s-form-field v-slot="{ componentField }" name="symbol">
+          <s-form-item>
+            <s-form-label>Symbol</s-form-label>
+            <s-form-control>
+              <s-input v-bind="componentField" />
+            </s-form-control>
+            <s-form-description>
+              The symbol of your proposal.
+            </s-form-description>
+            <s-form-message />
+          </s-form-item>
+        </s-form-field>
+        <s-form-field v-slot="{ componentField }" name="supply">
+          <s-form-item>
+            <s-form-label>Supply</s-form-label>
+            <s-form-control>
+              <s-input v-bind="componentField" type="number" />
+            </s-form-control>
+            <s-form-description>
+              The supply of your proposal.
+            </s-form-description>
+            <s-form-message />
+          </s-form-item>
+        </s-form-field>
+
         <s-form-field v-slot="{ componentField }" name="description">
           <s-form-item>
             <s-form-label>Description</s-form-label>
@@ -33,20 +58,6 @@
             <s-form-message />
           </s-form-item>
         </s-form-field>
-
-        <s-form-field v-slot="{ componentField }" name="budget">
-          <s-form-item>
-            <s-form-label>Budget</s-form-label>
-            <s-form-control>
-              <s-input v-bind="componentField" type="number" />
-            </s-form-control>
-            <s-form-description>
-              The budget of your proposal.
-            </s-form-description>
-            <s-form-message />
-          </s-form-item>
-        </s-form-field>
-
         <s-form-field v-slot="{ componentField }" name="image">
           <s-form-item>
             <s-form-label>Image</s-form-label>
@@ -72,18 +83,27 @@
 
 <script lang="ts" setup>
 import { toTypedSchema } from "@vee-validate/zod";
+import { useAccount, useWriteContract } from "@wagmi/vue";
 import { useForm } from "vee-validate";
+import { encodeFunctionData, type Address } from "viem";
 import * as z from "zod";
 import { useLogger } from "~/composables/logger";
-// import { patDAOContract } from "~/utils/contracts/PatDAOContract";
+import { config } from "~/plugins/1.wagmi";
+import { patDAOContract } from "~/utils/contracts/PatDAOContract";
+import { patGovernorContract } from "~/utils/contracts/PatGovernorContract";
 
 const { logger } = useLogger();
 
 const proposalSchema = toTypedSchema(
   z.object({
     title: z.string().min(1, "Title is required"),
+    symbol: z
+      .string()
+      .min(1, "Symbol is required")
+      .toUpperCase()
+      .max(5, "Symbol must be less than 5 characters"),
+    supply: z.number().int().positive("Supply must be positive"),
     description: z.string().min(1, "Description is required"),
-    budget: z.number().int().positive("Budget must be positive"),
     image: z.instanceof(File, {
       message: "Image is required",
     }),
@@ -95,39 +115,60 @@ const { handleSubmit } = useForm({
   initialValues: {
     title: "",
     description: "",
-    budget: 0,
+    symbol: "",
+    supply: 0,
   },
 });
 
-// const { writeContractAsync } = useWriteContract({ config });
+const { writeContractAsync } = useWriteContract({ config });
 
+const { address } = useAccount();
 const onSubmit = handleSubmit(async (values) => {
   console.log("Form submitted!", values);
   const fd = new FormData();
   fd.append("image", values.image as Blob);
-  const imageUrl = await $fetch("/api/proposal/image", {
+  const _jsonPath = await $fetch("/api/proposal/image", {
     method: "POST",
     body: fd,
   });
-
-  const newId = BigInt(`0x${crypto.randomUUID().split("-").join("")}`);
-  const _title = values.title;
+  const _name = values.title;
+  const _symbol = values.symbol;
   const _description = values.description;
-  const _budget = BigInt(values.budget * 10000) * BigInt(10n ** 14n);
+  const _feeRecipient = address.value as Address;
+  const _supply = BigInt(values.supply);
 
-  logger.log("Creating lesson", {
-    newId,
-    _title,
+  const targets: Address[] = [patDAOContract.address];
+  const targetValues: bigint[] = [0n];
+  logger.info("Encoding function data...", {
+    abi: patDAOContract.abi,
+    functionName: "createCampaign",
+    args: [_name, _symbol, _jsonPath, _feeRecipient, _supply],
+  });
+  const callData = [
+    encodeFunctionData({
+      abi: patDAOContract.abi,
+      functionName: "createCampaign",
+      args: [_name, _symbol, _jsonPath, _feeRecipient, _supply],
+    }),
+  ];
+
+  logger.info("Creating proposal...", {
+    targets,
+    targetValues,
+    callData,
     _description,
-    _budget,
-    imageUrl,
   });
 
-  // await writeContractAsync({
-  //   ...patDAOContract,
-  //   functionName: "createLesson",
-  //   args: [newId, _title, _description, _budget, imageUrl],
-  // });
+  try {
+    const res = await writeContractAsync({
+      ...patGovernorContract,
+      functionName: "propose",
+      args: [targets, targetValues, callData, _description],
+    });
+    console.log(res);
+  } catch (e) {
+    logger.error(e);
+  }
 });
 </script>
 
