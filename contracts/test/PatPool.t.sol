@@ -14,6 +14,7 @@ import {PoolManager} from "@v4-core/PoolManager.sol";
 import {PoolId, PoolIdLibrary} from "@v4-core/types/PoolId.sol";
 import {PoolSwapTest} from "@v4-core/test/PoolSwapTest.sol";
 import {TickMath} from "@v4-core/libraries/TickMath.sol";
+import {BalanceDelta} from "@v4-core/types/BalanceDelta.sol";
 
 contract PatTest is Test {
     PoolModifyLiquidityTest public lpRouter;
@@ -40,7 +41,8 @@ contract PatTest is Test {
         int24 tickSpacing = 10;
 
         // floor(sqrt(1) * 2^96)
-        uint160 startingPrice = 79228162514264337593543950336000;
+        uint160 startingPrice = 792281625142643375935439503360;
+        // uint160 startingPrice = 79228162514264337593543950336000;
 
         // hookless pool doesnt expect any initialization data
         bytes memory hookData = new bytes(0);
@@ -52,9 +54,10 @@ contract PatTest is Test {
             tickSpacing: tickSpacing,
             hooks: IHooks(address(0x0)) // !!! Hookless pool is address(0x0)
         });
+        vm.prank(vm.addr(1));
         manager.initialize(poolKey, startingPrice, hookData);
         poolId = poolKey.toId();
-        vm.deal(initialOwner, 1 ether);
+        vm.deal(initialOwner, 10 ether);
 //        vm.prank(initialOwner);
 //        IERC20(token0).approve(address(lpRouter), type(uint256).max);
         vm.prank(initialOwner);
@@ -63,7 +66,7 @@ contract PatTest is Test {
 
     function testLiquidity() public {
         // Provide 10e18 worth of liquidity on the range of [-600, 600]
-        int24 tickLower = -600;
+        int24 tickLower = -600; // TickMath.minUsableTick(10);
         int24 tickUpper = 600;
         int256 liquidityDelta = 10e18;
 
@@ -73,7 +76,7 @@ contract PatTest is Test {
         PoolSwapTest swapRouter = PoolSwapTest(vm.addr(1));
 
         vm.prank(vm.addr(1));
-        lpRouter.modifyLiquidity{ value: 1 ether }(
+        BalanceDelta result = lpRouter.modifyLiquidity(
             poolKey,
             IPoolManager.ModifyLiquidityParams({
                 tickLower: tickLower,
@@ -83,6 +86,15 @@ contract PatTest is Test {
             }),
             new bytes(0)
         );
+
+
+        // console.log("Initial owner: %s", vm.addr(1));
+        // console.log(result.amount0());
+        // console.log(result.amount1());
+
+
+        // console.log("amount0: %s", result.amount0());
+        // console.log("amount1: %s", result.amount1());
 
         // Convert PoolKey to PoolId using StateLibrary
 //        uint128 liquidityAmount = manager.getPosition(
@@ -96,14 +108,15 @@ contract PatTest is Test {
         bool zeroForOne = true;
         IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
             zeroForOne: zeroForOne,
-            amountSpecified: -1e18,
+            amountSpecified: -0.00001e18,
             sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT // unlimited impact
         });
         PoolSwapTest.TestSettings memory testSettings =
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
 
         bytes memory hookData = new bytes(0);
-        swapRouter.swap(poolKey, params, testSettings, hookData);
+        vm.prank(vm.addr(1));
+        swapRouter.swap{value: 1 ether}(poolKey, params, testSettings, hookData);
 
 //        console.log("swapRouter: %s", );
 
