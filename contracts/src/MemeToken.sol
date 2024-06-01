@@ -8,12 +8,21 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-contract MemeToken is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit {
-    constructor(address initialOwner, string memory name_, string memory symbol_)
-        ERC20(name_, symbol_)
-        Ownable(initialOwner)
-        ERC20Permit(name_)
-    {
+contract MemeToken is
+    ERC20,
+    ERC20Burnable,
+    ERC20Pausable,
+    Ownable,
+    ERC20Permit
+{
+    string private _tokenURI;
+    constructor(
+        address initialOwner,
+        string memory name_,
+        string memory symbol_,
+        string memory uri_
+    ) ERC20(name_, symbol_) Ownable(initialOwner) ERC20Permit(name_) {
+        _tokenURI = uri_;
         _mint(initialOwner, 10000000000000000 * 10 ** decimals());
     }
 
@@ -29,7 +38,15 @@ contract MemeToken is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit 
         _mint(to, amount);
     }
 
-    function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Pausable) {
+    function _update(
+        address from,
+        address to,
+        uint256 value
+    ) internal override(ERC20, ERC20Pausable) {
         super._update(from, to, value);
+    }
+
+    function tokenURI() public view returns (string memory) {
+        return _tokenURI;
     }
 }

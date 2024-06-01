@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
 import {PoolKey} from "@v4-core/types/PoolKey.sol";
-import {Currency,CurrencyLibrary} from "@v4-core/types/Currency.sol";
+import {Currency, CurrencyLibrary} from "@v4-core/types/Currency.sol";
 import {IPoolManager} from "@v4-core/interfaces/IPoolManager.sol";
 import {IHooks} from "@v4-core/interfaces/IHooks.sol";
 import {PoolModifyLiquidityTest} from "@v4-core/test/PoolModifyLiquidityTest.sol";
@@ -33,7 +33,12 @@ contract PatTest is Test {
 
         lpRouter = new PoolModifyLiquidityTest(manager);
         console.log("lpRouter: %s", address(lpRouter));
-        MemeToken token = new MemeToken(initialOwner, "CatWithCoco", "CWC");
+        MemeToken token = new MemeToken(
+            initialOwner,
+            "CatWithCoco",
+            "CWC",
+            "/"
+        );
         console.log("memeToken: %s", address(token));
         address token0 = address(0);
         address token1 = address(token);
@@ -41,8 +46,8 @@ contract PatTest is Test {
         int24 tickSpacing = 1;
 
         // floor(sqrt(1) * 2^96)
-//        uint160 startingPrice = 792281625142643375935439503360;
-//        uint160 startingPrice = 7922816251426433759354395033600;
+        //        uint160 startingPrice = 792281625142643375935439503360;
+        //        uint160 startingPrice = 7922816251426433759354395033600;
         uint160 startingPrice = 112045541949572279837463876454;
 
         // hookless pool doesnt expect any initialization data
@@ -108,12 +113,10 @@ contract PatTest is Test {
         IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
             zeroForOne: zeroForOne,
             amountSpecified: -0.0001 ether,
-            sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT// unlimited impact
+            sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT // unlimited impact
         });
-        PoolSwapTest.TestSettings memory testSettings =
-            PoolSwapTest.TestSettings(false, false);
-
-    
+        PoolSwapTest.TestSettings memory testSettings = PoolSwapTest
+            .TestSettings(false, false);
 
         bytes memory hookData = new bytes(0);
         //        vm.prank(vm.addr(1));
@@ -122,7 +125,12 @@ contract PatTest is Test {
         //        IERC20(zeroForOne ? Currency.unwrap(poolKey.currency1) : Currency.unwrap(poolKey.currency0)).approve(address(swapRouter), type(uint256).max);
         vm.deal(address(manager), 1000 ether);
         vm.prank(vm.addr(1));
-        swapRouter.swap{value: 0.0001 ether}(poolKey, params, testSettings, hookData);
+        swapRouter.swap{value: 0.0001 ether}(
+            poolKey,
+            params,
+            testSettings,
+            hookData
+        );
 
         //        console.log("swapRouter: %s", );
 
