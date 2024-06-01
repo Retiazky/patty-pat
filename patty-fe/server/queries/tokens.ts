@@ -7,3 +7,19 @@ export default `query GetTokens {
     uri
   }
 }`;
+
+export const queryBalanceByAddress = `query GetBalances($address: Bytes!) {
+  tokenBalances(where: {account: $address}) {
+    account
+    amount
+    id
+    token {
+      symbol
+      decimals
+      id
+      name
+      totalSupply
+      uri
+    }
+  }
+}`;

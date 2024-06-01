@@ -124,7 +124,6 @@ const { writeContractAsync } = useWriteContract({ config });
 
 const { address } = useAccount();
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Form submitted!", values);
   const fd = new FormData();
   fd.append("image", values.image as Blob);
   const _jsonPath = await $fetch("/api/proposal/image", {
@@ -139,11 +138,6 @@ const onSubmit = handleSubmit(async (values) => {
 
   const targets: Address[] = [patDAOContract.address];
   const targetValues: bigint[] = [0n];
-  logger.info("Encoding function data...", {
-    abi: patDAOContract.abi,
-    functionName: "createCampaign",
-    args: [_name, _symbol, _jsonPath, _feeRecipient, _supply],
-  });
   const callData = [
     encodeFunctionData({
       abi: patDAOContract.abi,
@@ -152,20 +146,12 @@ const onSubmit = handleSubmit(async (values) => {
     }),
   ];
 
-  logger.info("Creating proposal...", {
-    targets,
-    targetValues,
-    callData,
-    _description,
-  });
-
   try {
-    const res = await writeContractAsync({
+    await writeContractAsync({
       ...patGovernorContract,
       functionName: "propose",
       args: [targets, targetValues, callData, _description],
     });
-    console.log(res);
   } catch (e) {
     logger.error(e);
   }

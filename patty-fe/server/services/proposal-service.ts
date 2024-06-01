@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { decodeFunctionData } from "viem";
-import { useLogger } from "~/composables/logger";
+import { decodeFunctionData, type Address } from "viem";
 import proposalQuery, { queryByAddress } from "~/server/queries/proposal";
 import type { GraphQLResponse, Proposal } from "~/types";
 import { patDAOContract } from "~/utils/contracts/PatDAOContract";
@@ -8,8 +7,6 @@ import { patDAOContract } from "~/utils/contracts/PatDAOContract";
 const RUNTIME_CONFIG = useRuntimeConfig();
 
 export function useProposalService() {
-  const { logger } = useLogger("proposal-service");
-
   const getProposals = async (address?: string) => {
     type RawProposal = {
       id: string;
@@ -41,7 +38,6 @@ export function useProposalService() {
         }),
       }
     );
-    logger.info("getProposals", resp.data);
     const proposals: Proposal[] = [];
     resp.data.proposals.forEach((rawProposal) => {
       const data = decodeFunctionData({
@@ -55,11 +51,15 @@ export function useProposalService() {
           id: rawProposal.id,
           title: name,
           symbol,
+          executed: rawProposal.executed,
           description: rawProposal.description,
+          targets: rawProposal.targets as Address[],
+          values: rawProposal.values,
+          calldatas: rawProposal.calldatas,
           votes: {
-            for: rawProposal.for,
-            against: rawProposal.against,
-            abstain: rawProposal.abstain,
+            for: rawProposal.for / 10 ** 18,
+            against: rawProposal.against / 10 ** 18,
+            abstain: rawProposal.abstain / 10 ** 18,
           },
           endingDateTime: Number(rawProposal.voteEnd + "000"),
           meta,

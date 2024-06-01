@@ -51,6 +51,7 @@ import { useAccount, useWriteContract } from "@wagmi/vue";
 import { config } from "~/plugins/1.wagmi";
 import type { Proposal } from "~/types";
 import { patGovernorContract } from "~/utils/contracts/PatGovernorContract";
+import { formatDate } from "~/utils/helpers/date";
 const props = defineProps<{
   proposal: Proposal;
 }>();
@@ -78,12 +79,9 @@ const voteForCategory = async (vote: Vote) => {
   });
 };
 
-const fullDateFormat = computed(() => {
-  const d = new Date(props.proposal.endingDateTime);
-  return `${d.getFullYear()}-${
-    d.getMonth() + 1
-  }-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
-});
+const fullDateFormat = computed(() =>
+  formatDate(props.proposal.endingDateTime)
+);
 
 const isAfterDeadline = computed(() => {
   return Date.now() > props.proposal.endingDateTime;

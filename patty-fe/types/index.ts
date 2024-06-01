@@ -1,3 +1,5 @@
+import type { Address } from "viem";
+
 export interface GraphQLResponse<T> {
   data: T;
 }
@@ -8,7 +10,11 @@ export type Proposal = {
   symbol: string;
   description: string;
   meta: string;
+  executed: boolean;
   endingDateTime: number;
+  targets: Address[];
+  values: string[];
+  calldatas: string[];
   votes: {
     for: number;
     against: number;
@@ -41,7 +47,5 @@ export type Token = {
   id: string;
   symbol: string;
   amount: number;
-  meta: {
-    image: string;
-  };
+  meta?: string;
 };

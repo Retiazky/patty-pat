@@ -8,7 +8,9 @@
     "source.organizeImports": "always"
   },
   "cSpell.words": [
+    "calldatas",
     "iconify",
+    "keccak",
     "Mandova",
     "Nuxt",
     "sepolia",
