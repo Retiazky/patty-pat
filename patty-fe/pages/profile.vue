@@ -10,6 +10,7 @@
         />
         <span>{{ address }}</span>
       </div>
+      <proposals-card :proposals="proposals" />
       <trades-table-card :transfers="transfers" :profile-view="true" />
       <tokens-card :tokens="tokens" />
     </div>
@@ -18,11 +19,12 @@
 
 <script lang="ts" setup>
 import { useAccount } from '@wagmi/vue';
-import type { Token, Transfer } from '~/types';
+import type { Proposal, Token, Transfer } from '~/types';
 const { address } = useAccount();
 
 const transfers = ref<Transfer[]>([]);
 const tokens = ref<Token[]>([]);
+const proposals = ref<Proposal[]>([]);
 
 onMounted(async () => {
   if (!address.value) return;
@@ -33,6 +35,9 @@ onMounted(async () => {
 
   const toks: Token[] = await $fetch('/api/token?' + params.toString());
   tokens.value = toks;
+
+  const props: Proposal[] = await $fetch('/api/proposal?' + params.toString());
+  proposals.value = props;
 });
 </script>
 

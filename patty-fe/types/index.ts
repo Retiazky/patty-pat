@@ -9,7 +9,12 @@ export type Proposal = {
   imageSrc: string;
   endingDateTime: string;
   minAmount: number;
-  votes: number;
+  votes: {
+    votesFor: number;
+    votesAgainst: number;
+    votesAbstain: number;
+  };
+  creator: string;
 };
 
 export type Funding = {
