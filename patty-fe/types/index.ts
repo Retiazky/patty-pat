@@ -5,11 +5,15 @@ export interface GraphQLResponse<T> {
 export type Proposal = {
   id: string;
   title: string;
+  symbol: string;
   description: string;
-  imageSrc: string;
-  endingDateTime: string;
-  minAmount: number;
-  votes: number;
+  meta: string;
+  endingDateTime: number;
+  votes: {
+    for: number;
+    against: number;
+    abstain: number;
+  };
 };
 
 export type Funding = {
@@ -25,7 +29,7 @@ export type Transfer = {
   id: string;
   fundingId: string;
   account: string;
-  type: 'buy' | 'sell';
+  type: "buy" | "sell";
   eth: number;
   token: number;
   date: string;
