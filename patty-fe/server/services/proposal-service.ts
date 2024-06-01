@@ -38,7 +38,12 @@ export function useProposalService() {
     await supabase.storage.from("images").upload(`${uniqueId}.png`, blob);
 
     const path = `${RUNTIME_CONFIG.supabaseUrl}/storage/v1/object/public/images/${uniqueId}.png`;
-    return path;
+
+    const json = JSON.stringify({ image: path });
+    await supabase.storage.from("json").upload(`${uniqueId}.json`, json);
+
+    const jsonPath = `${RUNTIME_CONFIG.supabaseUrl}/storage/v1/object/public/json/${uniqueId}.json`;
+    return jsonPath;
   };
 
   return { getProposals, saveImage };

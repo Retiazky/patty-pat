@@ -1,6 +1,6 @@
 import { abi } from "@/utils/abi/PatToken";
 
 export const patTokenContract = {
-  address: "0x84d18FA3c1E26E93E5aD24cfe753F9c8a089b7DF",
+  address: "0xB17C316f9FC551211f3086BB24f047f50ae35AF5",
   abi,
 } as const;
