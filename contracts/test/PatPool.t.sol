@@ -10,6 +10,8 @@ import {IHooks} from "@v4-core/interfaces/IHooks.sol";
 import {PoolModifyLiquidityTest} from "@v4-core/test/PoolModifyLiquidityTest.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {StateLibrary} from "@v4-core/libraries/StateLibrary.sol";
+import {MemeToken} from "src/MemeToken.sol";
+import {PoolManager} from "@v4-core/PoolManager.sol";
 
 contract PatTest is Test {
     PatPool public pool;
@@ -23,11 +25,13 @@ contract PatTest is Test {
         address initialOwner = vm.addr(1);
         console.log("Initial owner: %s", initialOwner);
         pool = new PatPool();
-        manager = IPoolManager(0x1234567890123456789012345678901234567890);
+        PoolManager deployedManager = new PoolManager(500000);
+        manager = IPoolManager(address(deployedManager));
 
         lpRouter = new PoolModifyLiquidityTest(manager);
-        address token0 = address(0x11);
-        address token1 = address(0x22);
+        MemeToken token = new MemeToken(initialOwner, "CatWithCoco", "CWC");
+        address token0 = address(0);
+        address token1 = address(token);
         uint24 swapFee = 500; // 0.05% fee tier
         int24 tickSpacing = 10;
 
