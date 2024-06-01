@@ -57,6 +57,7 @@ contract PatDAO is IPatDAO {
 
 //        manager = IPoolManager(address(0x43E62b5c46884f439d4d2b7c3f47fBAff06D0551));
         manager = IPoolManager(managerAddress);
+        //TODO: fix
         lpRouter = new PoolModifyLiquidityTest(manager);
 
         MemeToken token = new MemeToken(governanceSC, name, symbol, "/");
@@ -78,16 +79,45 @@ contract PatDAO is IPatDAO {
             hooks: IHooks(address(0x0)) // !!! Hookless pool is address(0x0)
         });
 
+        //provideLiquidity(address (token1),uint160 (startingPrice),bytes (hookData) );
+//        manager.initialize(poolKey, startingPrice, hookData);
+//        poolId = poolKey.toId();
+//        IERC20(token1).approve(address(lpRouter), type(uint256).max);
+//
+//        int24 tickLower = -400;
+//        int24 tickUpper = 0;
+//        int256 liquidityDelta = 10e18;
+//
+//
+//        BalanceDelta result = lpRouter.modifyLiquidity{value: 10 ether}(
+//            poolKey,
+//            IPoolManager.ModifyLiquidityParams({
+//                tickLower: tickLower,
+//                tickUpper: tickUpper,
+//                liquidityDelta: liquidityDelta,
+//                salt: 0
+//            }),
+//            new bytes(0)
+//        );
+
+        emit CampaingCreated(name, symbol, uri, supply, token1, address(0));
+    }
+
+    function provideLiquidity(address _token,uint160 _startingPrice,bytes memory _hookData) public onlyGovernance {
+        address token = _token;
+        uint160 startingPrice = _startingPrice;
+        bytes memory hookData = _hookData;
+
         manager.initialize(poolKey, startingPrice, hookData);
         poolId = poolKey.toId();
-        IERC20(token1).approve(address(lpRouter), type(uint256).max);
+        IERC20(token).approve(address(lpRouter), type(uint256).max);
 
         int24 tickLower = -400;
         int24 tickUpper = 0;
         int256 liquidityDelta = 10e18;
 
 
-        BalanceDelta result = lpRouter.modifyLiquidity{value: 10 ether}(
+        BalanceDelta result = lpRouter.modifyLiquidity{value: msg.value}(
             poolKey,
             IPoolManager.ModifyLiquidityParams({
                 tickLower: tickLower,
@@ -98,7 +128,6 @@ contract PatDAO is IPatDAO {
             new bytes(0)
         );
 
-        emit CampaingCreated(name, symbol, uri, supply, token1, address(0));
     }
 
     function removeCampaign(address token) public onlyGovernance {
