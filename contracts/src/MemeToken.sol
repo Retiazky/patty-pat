@@ -9,7 +9,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 contract MemeToken is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit {
-    constructor(address initialOwner, string memory name_, string memory symbol_) ERC20(name_, symbol_) Ownable(initialOwner) ERC20Permit(name_) {
+    constructor(address initialOwner, string memory name_, string memory symbol_)
+        ERC20(name_, symbol_)
+        Ownable(initialOwner)
+        ERC20Permit(name_)
+    {
         _mint(initialOwner, 10000000000000000 * 10 ** decimals());
     }
 

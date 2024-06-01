@@ -6,7 +6,7 @@ import {IHooks} from "@v4-core/interfaces/IHooks.sol";
 import {PoolKey} from "@v4-core/types/PoolKey.sol";
 import {CurrencyLibrary, Currency} from "@v4-core/types/Currency.sol";
 
-contract PoolInitialize {
+contract PatPool {
     using CurrencyLibrary for Currency;
 
     // set the initialize router
