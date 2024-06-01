@@ -51,7 +51,12 @@
           <s-form-item>
             <s-form-label>Image</s-form-label>
             <s-form-control>
-              <s-input type="file" v-bind="componentField" />
+              <input
+                class="w-full border border-gray-300 rounded-md p-2"
+                type="file"
+                accept="image/*"
+                v-bind="componentField"
+              />
             </s-form-control>
             <s-form-description>
               The image of your proposal.
@@ -69,13 +74,19 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import * as z from "zod";
+import { useLogger } from "~/composables/logger";
+// import { patDAOContract } from "~/utils/contracts/PatDAOContract";
+
+const { logger } = useLogger();
 
 const proposalSchema = toTypedSchema(
   z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
-    budget: z.number().int().positive(),
-    image: z.instanceof(File).nullable(),
+    title: z.string().min(1, "Title is required"),
+    description: z.string().min(1, "Description is required"),
+    budget: z.number().int().positive("Budget must be positive"),
+    image: z.instanceof(File, {
+      message: "Image is required",
+    }),
   })
 );
 
@@ -85,12 +96,38 @@ const { handleSubmit } = useForm({
     title: "",
     description: "",
     budget: 0,
-    image: null,
   },
 });
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
+// const { writeContractAsync } = useWriteContract({ config });
+
+const onSubmit = handleSubmit(async (values) => {
+  console.log("Form submitted!", values);
+  const fd = new FormData();
+  fd.append("image", values.image as Blob);
+  const imageUrl = await $fetch("/api/proposal/image", {
+    method: "POST",
+    body: fd,
+  });
+
+  const newId = BigInt(`0x${crypto.randomUUID().split("-").join("")}`);
+  const _title = values.title;
+  const _description = values.description;
+  const _budget = BigInt(values.budget * 10000) * BigInt(10n ** 14n);
+
+  logger.log("Creating lesson", {
+    newId,
+    _title,
+    _description,
+    _budget,
+    imageUrl,
+  });
+
+  // await writeContractAsync({
+  //   ...patDAOContract,
+  //   functionName: "createLesson",
+  //   args: [newId, _title, _description, _budget, imageUrl],
+  // });
 });
 </script>
 
