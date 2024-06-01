@@ -10,14 +10,12 @@ import {PoolManager} from "@v4-core/PoolManager.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract PatPool is PoolManager {
-
     constructor(uint256 _gas) PoolManager(_gas) {}
     // using CurrencyLibrary for Currency;
     // using StateLibrary for IPoolManager;
 
     // set the initialize router
     // IPoolManager manager = IPoolManager(address(0));
-
 
     // function init(
     //     address token0,
