@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IPatDAO, Campaign, CampaingCreated, BuybackCreated, CampaignRemoved} from "./interfaces/IPatDAO.sol";
+import {IPatDAO, Campaign, CampaingCreated, BuybackCreated} from "./interfaces/IPatDAO.sol";
 
 contract PatDAO is IPatDAO {
     address public governanceSC;
