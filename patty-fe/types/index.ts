@@ -9,7 +9,12 @@ export type Proposal = {
   imageSrc: string;
   endingDateTime: string;
   minAmount: number;
-  votes: number;
+  votes: {
+    votesFor: number;
+    votesAgainst: number;
+    votesAbstain: number;
+  };
+  creator: string;
 };
 
 export type Funding = {
@@ -28,6 +33,16 @@ export type Transfer = {
   type: 'buy' | 'sell';
   eth: number;
   token: number;
+  tokenSymbol: string;
   date: string;
   transaction: string;
+};
+
+export type Token = {
+  id: string;
+  symbol: string;
+  amount: number;
+  meta: {
+    image: string;
+  };
 };
