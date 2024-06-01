@@ -17,4 +17,17 @@ export type Funding = {
   title: string;
   imageSrc: string;
   description: string;
+  tokenName: string;
+  tokenSymbol: string;
+};
+
+export type Transfer = {
+  id: string;
+  fundingId: string;
+  account: string;
+  type: 'buy' | 'sell';
+  eth: number;
+  token: number;
+  date: string;
+  transaction: string;
 };

@@ -15,10 +15,14 @@ bash setup.sh
 ## Testing the contract
 
 ```
-forge test
+forge test --evm-version cancun
 ```
 
 ## Deploying the contract
+
+```
+forge build --evm-version cancun
+```
 
 You can simulate a deployment by running the script:
 
