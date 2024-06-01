@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import {Test, console} from "forge-std/Test.sol";
 import {MemeToken} from "src/MemeToken.sol";
 
-
 contract MemeTokenTest is Test {
     MemeToken public token;
 

@@ -16,6 +16,7 @@ contract PatTest is Test {
     PoolModifyLiquidityTest public lpRouter;
     IPoolManager public manager;
     PoolKey public poolKey;
+
     using StateLibrary for IPoolManager;
 
     function setUp() public {
@@ -54,8 +55,12 @@ contract PatTest is Test {
         int24 tickLower = -600;
         int24 tickUpper = 600;
         int256 liquidityDelta = 10e18;
+
+        // Convert PoolKey to PoolId using StateLibrary
+        bytes32 poolId = StateLibrary.keyToId(poolKey);
+
         lpRouter.modifyLiquidity(
-            poolKey,
+            poolId,
             IPoolManager.ModifyLiquidityParams({
                 tickLower: tickLower,
                 tickUpper: tickUpper,
@@ -66,7 +71,7 @@ contract PatTest is Test {
         );
 
         (uint128 liquidityAmount,,,,) = manager.getPosition(
-            poolKey,
+            poolId,
             address(this),
             tickLower,
             tickUpper,
