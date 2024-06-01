@@ -5,10 +5,19 @@ import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
 import {IPoolManager} from "@v4-core/interfaces/IPoolManager.sol";
 import {PoolModifyLiquidityTest} from "@v4-core/test/PoolModifyLiquidityTest.sol";
+import {PoolKey} from "@v4-core/types/PoolKey.sol";
+import {BalanceDelta} from "@v4-core/types/BalanceDelta.sol";
+import {Currency,CurrencyLibrary} from "@v4-core/types/Currency.sol";
+import {IHooks} from "@v4-core/interfaces/IHooks.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {PoolId, PoolIdLibrary} from "@v4-core/types/PoolId.sol";
 
 // import { PatPool } from "src/PatPool.sol";
 
 contract SteadyPatScript is Script {
+    PoolModifyLiquidityTest public lpRouter;
+    PoolKey public poolKey;
+
     function setUp() public {}
 
     function run() external {
@@ -24,12 +33,13 @@ contract SteadyPatScript is Script {
         poolKey = PoolKey({
             currency0: CurrencyLibrary.NATIVE,
             currency1: Currency.wrap(token1),
-            fee: swapFee,
+            fee: 0,
             tickSpacing: 1,
             hooks: IHooks(address(0x0)) // !!! Hookless pool is address(0x0)
         });
 
         uint160 startingPrice = 7922816251426433759354395033600;
+        bytes memory hookData = new bytes(0);
 
         manager.initialize(poolKey, startingPrice, hookData);
 
