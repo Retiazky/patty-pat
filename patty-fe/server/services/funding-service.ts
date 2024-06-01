@@ -10,16 +10,16 @@ export function useFundingService() {
       title: "Funding 1",
       description: "Description 1",
       imageSrc: "img/prop_cat.png",
-      tokenName: "Cattie",
-      tokenSymbol: "CAT",
+      name: "Cattie",
+      symbol: "CAT",
     },
     {
       id: "2",
       title: "Funding 2",
       description: "Description 2",
       imageSrc: "img/prop_dino.png",
-      tokenName: "Dino",
-      tokenSymbol: "DINO",
+      name: "Dino",
+      symbol: "DINO",
     },
   ];
 
@@ -52,8 +52,8 @@ export function useFundingService() {
         title: rawToken.name,
         description: rawToken.symbol,
         imageSrc: rawToken.uri,
-        tokenName: rawToken.name,
-        tokenSymbol: rawToken.symbol,
+        name: rawToken.name,
+        symbol: rawToken.symbol,
       });
     });
 

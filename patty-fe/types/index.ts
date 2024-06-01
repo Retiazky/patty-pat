@@ -21,8 +21,8 @@ export type Funding = {
   title: string;
   imageSrc: string;
   description: string;
-  tokenName: string;
-  tokenSymbol: string;
+  name: string;
+  symbol: string;
 };
 
 export type Transfer = {

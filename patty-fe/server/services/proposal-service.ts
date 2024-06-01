@@ -67,6 +67,7 @@ export function useProposalService() {
         proposals.push(proposal);
       }
     });
+    return proposals;
   };
 
   const saveImage = async (blob: Blob): Promise<string> => {

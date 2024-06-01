@@ -9,7 +9,6 @@
           <s-table-row class="hover:bg-transparent">
             <s-table-head> Title </s-table-head>
             <s-table-head>Ending Date</s-table-head>
-            <s-table-head>Min Amount</s-table-head>
             <s-table-head>Votes For</s-table-head>
             <s-table-head>Votes Against</s-table-head>
             <s-table-head>Votes Abstain</s-table-head>
@@ -24,16 +23,13 @@
             <s-table-cell>{{ proposal.title }}</s-table-cell>
             <s-table-cell>{{ proposal.endingDateTime }}</s-table-cell>
             <s-table-cell class="text-center">{{
-              proposal.minAmount
+              proposal.votes.for
             }}</s-table-cell>
             <s-table-cell class="text-center">{{
-              proposal.votes.votesFor
+              proposal.votes.against
             }}</s-table-cell>
             <s-table-cell class="text-center">{{
-              proposal.votes.votesAgainst
-            }}</s-table-cell>
-            <s-table-cell class="text-center">{{
-              proposal.votes.votesAbstain
+              proposal.votes.abstain
             }}</s-table-cell>
           </s-table-row>
         </s-table-body>
@@ -43,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Proposal } from '~/types';
+import type { Proposal } from "~/types";
 
 defineProps<{
   proposals: Proposal[];
