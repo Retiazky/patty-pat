@@ -87,14 +87,8 @@ contract PatTest is Test {
             new bytes(0)
         );
 
-
-        // console.log("Initial owner: %s", vm.addr(1));
-        // console.log(result.amount0());
-        // console.log(result.amount1());
-
-
-        // console.log("amount0: %s", result.amount0());
-        // console.log("amount1: %s", result.amount1());
+         console.logInt(result.amount0());
+         console.logInt(result.amount1());
 
         // Convert PoolKey to PoolId using StateLibrary
 //        uint128 liquidityAmount = manager.getPosition(
