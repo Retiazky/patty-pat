@@ -1,0 +1,16 @@
+type Proposal @entity {
+	id: ID!
+	proposer: String! @index
+	description: String!
+	against: BigInt!
+	for: BigInt!
+	abstain: BigInt!
+	createdAt: Int!
+	voteStart: BigInt!
+	voteEnd: BigInt!
+	executed: Boolean!
+	canceled: Boolean!
+	targets: [String!]
+	values: [String!]
+	calldatas: [String!]
+}
