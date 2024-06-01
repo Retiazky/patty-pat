@@ -14,7 +14,7 @@ contract PoolManagerScript is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         PoolManager manager = new PoolManager(500000);
-        // console.log("PoolManager deployed to %s", PoolManager(manager));
+        console.log("PoolManager deployed to %s", address(manager));
 
         vm.stopBroadcast();
     }
