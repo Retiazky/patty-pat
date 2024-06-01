@@ -28,6 +28,7 @@ export function useProposalService() {
   const getProposals = () => {
     return proposals;
   };
+  
   const saveImage = async (blob: Blob): Promise<string> => {
     const supabase = createClient(
       RUNTIME_CONFIG.supabaseUrl,

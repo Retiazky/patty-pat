@@ -1,6 +1,6 @@
-import { abi } from "@/utils/abi/PatDAO";
+import { abi } from '@/utils/abi/PatDAO';
 
 export const patDAOContract = {
-  address: "0x4C2a1Bf6d7a0cFd082587d0C376530d1c28da0e7",
+  address: '0x85f77dCACcFf0614e4423ab05740B262A96438b3',
   abi,
 } as const;

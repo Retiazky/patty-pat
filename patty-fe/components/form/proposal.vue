@@ -9,14 +9,14 @@
     </s-card-header>
     <s-card-content>
       <form @submit="onSubmit">
-        <s-form-field v-slot="{ componentField }" name="title">
+        <s-form-field v-slot="{ componentField }" name="tokenName">
           <s-form-item>
-            <s-form-label>Title</s-form-label>
+            <s-form-label>Token Name</s-form-label>
             <s-form-control>
               <s-input v-bind="componentField" />
             </s-form-control>
             <s-form-description>
-              The title of your proposal.
+              The name of your proposal.
             </s-form-description>
             <s-form-message />
           </s-form-item>
@@ -34,20 +34,42 @@
           </s-form-item>
         </s-form-field>
 
-        <s-form-field v-slot="{ componentField }" name="budget">
+        <s-form-field v-slot="{ componentField }" name="symbol">
           <s-form-item>
-            <s-form-label>Budget</s-form-label>
+            <s-form-label>Token Symbol</s-form-label>
             <s-form-control>
-              <s-input v-bind="componentField" type="number" />
+              <s-input v-bind="componentField" type="string" />
+            </s-form-control>
+            <s-form-description> The symbol of your token. </s-form-description>
+            <s-form-message />
+          </s-form-item>
+        </s-form-field>
+
+        <s-form-field v-slot="{ componentField }" name="feeRecipient">
+          <s-form-item>
+            <s-form-label>Fee Recipient</s-form-label>
+            <s-form-control>
+              <s-input v-bind="componentField" type="string" />
+            </s-form-control>
+            <s-form-description> The recipient address </s-form-description>
+            <s-form-message />
+          </s-form-item>
+        </s-form-field>
+
+        <s-form-field v-slot="{ componentField }" name="supply">
+          <s-form-item>
+            <s-form-label>Supply</s-form-label>
+            <s-form-control>
+              <s-input v-bind="componentField" type="string" />
             </s-form-control>
             <s-form-description>
-              The budget of your proposal.
+              The supply of your proposal.
             </s-form-description>
             <s-form-message />
           </s-form-item>
         </s-form-field>
 
-        <s-form-field v-slot="{ componentField }" name="image">
+        <!-- <s-form-field v-slot="{ componentField }" name="image">
           <s-form-item>
             <s-form-label>Image</s-form-label>
             <s-form-control>
@@ -63,7 +85,7 @@
             </s-form-description>
             <s-form-message />
           </s-form-item>
-        </s-form-field>
+        </s-form-field> -->
         <s-button class="w-full mt-2" type="submit">Submit</s-button>
       </form>
     </s-card-content>
@@ -71,63 +93,58 @@
 </template>
 
 <script lang="ts" setup>
-import { toTypedSchema } from "@vee-validate/zod";
-import { useForm } from "vee-validate";
-import * as z from "zod";
-import { useLogger } from "~/composables/logger";
-// import { patDAOContract } from "~/utils/contracts/PatDAOContract";
+import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
+import * as z from 'zod';
+import { useLogger } from '~/composables/logger';
+import { config } from '~/plugins/wagmi';
+import { patDAOContract } from '~/utils/contracts/PatDAOContract';
 
 const { logger } = useLogger();
 
 const proposalSchema = toTypedSchema(
   z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
-    budget: z.number().int().positive("Budget must be positive"),
-    image: z.instanceof(File, {
-      message: "Image is required",
-    }),
+    tokenName: z.string().min(1, 'Token name is required'),
+    symbol: z.string().min(1, 'Symbol is required'),
+    feeRecipient: z.string().min(1, 'Address is required'),
+    supply: z.number().int().positive('Supply must be positive'),
+    description: z.string().min(1, 'Description is required'),
   })
 );
 
 const { handleSubmit } = useForm({
   validationSchema: proposalSchema,
   initialValues: {
-    title: "",
-    description: "",
-    budget: 0,
+    tokenName: '',
+    symbol: '',
+    feeRecipient: '',
+    supply: 0,
+    description: '',
   },
 });
 
-// const { writeContractAsync } = useWriteContract({ config });
+const { writeContractAsync } = useWriteContract({ config });
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Form submitted!", values);
+  console.log('Form submitted!', values);
   const fd = new FormData();
-  fd.append("image", values.image as Blob);
-  const imageUrl = await $fetch("/api/proposal/image", {
-    method: "POST",
-    body: fd,
-  });
-
-  const newId = BigInt(`0x${crypto.randomUUID().split("-").join("")}`);
-  const _title = values.title;
-  const _description = values.description;
-  const _budget = BigInt(values.budget * 10000) * BigInt(10n ** 14n);
-
-  logger.log("Creating lesson", {
-    newId,
-    _title,
-    _description,
-    _budget,
-    imageUrl,
-  });
-
-  // await writeContractAsync({
-  //   ...patDAOContract,
-  //   functionName: "createLesson",
-  //   args: [newId, _title, _description, _budget, imageUrl],
+  // const imageUrl = await $fetch("/api/proposal/image", {
+  //   method: "POST",
+  //   body: fd,
   // });
+
+  const newId = BigInt(`0x${crypto.randomUUID().split('-').join('')}`);
+  const _tokenName = values.tokenName;
+  const _description = values.description;
+  const _symbol = values.symbol;
+  const _feeRecipient = values.feeRecipient;
+  const _supply = values.supply;
+
+  await writeContractAsync({
+    ...patDAOContract,
+    functionName: 'createProposal',
+    args: [newId, _tokenName, _description, _symbol, _feeRecipient, _supply],
+  });
 });
 </script>
 
