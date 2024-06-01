@@ -1,7 +1,7 @@
 <template>
   <s-card>
     <s-card-header>
-      <s-card-title>{{ name }}</s-card-title>
+      <s-card-title>{{ tokenName }}</s-card-title>
     </s-card-header>
     <s-card-content>
       <div class="flex justify-between">
@@ -38,7 +38,7 @@
                 <s-form-control>
                   <s-input v-bind="componentField" readonly />
                 </s-form-control>
-                <s-form-description>{{ token }}</s-form-description>
+                <s-form-description>{{ tokenSymbol }}</s-form-description>
                 <s-form-message />
               </s-form-item>
             </s-form-field>
@@ -47,7 +47,7 @@
               type="submit"
               :variant="direction === 'down' ? 'default' : 'secondary'"
             >
-              {{ direction === "down" ? "Buy" : "Sell" }}
+              {{ direction === 'down' ? 'Buy' : 'Sell' }}
             </s-button>
           </form>
         </div>
@@ -57,23 +57,23 @@
 </template>
 
 <script lang="ts" setup>
-import { toTypedSchema } from "@vee-validate/zod";
+import { toTypedSchema } from '@vee-validate/zod';
 import {
   LineStyle,
   PriceScaleMode,
   type CandlestickData,
   type ChartOptions,
   type Time,
-} from "lightweight-charts";
-import { useForm } from "vee-validate";
-import * as z from "zod";
+} from 'lightweight-charts';
+import { useForm } from 'vee-validate';
+import * as z from 'zod';
 
 defineProps<{
-  name: string;
-  token: string;
+  tokenName: string | undefined;
+  tokenSymbol: string | undefined;
 }>();
 
-const direction = ref("down");
+const direction = ref('down');
 
 const tradeSchema = toTypedSchema(
   z.object({
@@ -101,7 +101,7 @@ const chartOptions: Partial<ChartOptions> = {
     borderVisible: true,
     alignLabels: true,
     autoScale: true,
-    borderColor: "#eee",
+    borderColor: '#eee',
     entireTextOnly: false,
     invertScale: false,
     minimumWidth: 60,
@@ -115,12 +115,12 @@ const chartOptions: Partial<ChartOptions> = {
   grid: {
     vertLines: {
       style: LineStyle.Solid,
-      color: "#eee",
+      color: '#eee',
       visible: true,
     },
     horzLines: {
       style: LineStyle.Solid,
-      color: "#eee",
+      color: '#eee',
       visible: true,
     },
   },

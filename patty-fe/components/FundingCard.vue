@@ -13,7 +13,7 @@
       <s-button
         class="flex-1 border-2"
         variant="success"
-        @click="$router.push('/funding/1')"
+        @click="$router.push(`/funding/${funding.id}`)"
         >Support</s-button
       >
     </s-card-footer>
