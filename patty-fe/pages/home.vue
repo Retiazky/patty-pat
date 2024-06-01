@@ -7,8 +7,11 @@
 </template>
 <script setup lang="ts">
 import type { Funding } from '~/types';
-import { useFundingService } from '~/server/services';
 
-const service = useFundingService();
-const fundings: Funding[] = service.getFundings();
+const fundings = ref<Funding[]>([]);
+
+onMounted(async () => {
+  const data: Funding[] = await $fetch('/api/funding/');
+  fundings.value = data;
+});
 </script>
