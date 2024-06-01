@@ -33,7 +33,7 @@ contract PatTest is Test {
 
         lpRouter = new PoolModifyLiquidityTest(manager);
         console.log("lpRouter: %s", address(lpRouter));
-        MemeToken token = new MemeToken(initialOwner, "CatWithCoco", "CWC");
+        MemeToken token = new MemeToken(initialOwner, "CatWithCoco", "CWC", "/");
         console.log("memeToken: %s", address(token));
         address token0 = address(0);
         address token1 = address(token);
