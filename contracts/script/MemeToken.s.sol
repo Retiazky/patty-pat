@@ -14,8 +14,9 @@ contract MemeTokenScript is Script {
         vm.startBroadcast(deployerPrivateKey);
         string memory name = "Cat Needs Mouse";
         string memory symbol = "CNM";
-        MemeToken token = new MemeToken(deployerAddress, name, symbol);
-        console.log("token deployed to %s", address(manager));
+        string memory uri = "ipfs://bafkreicx3jlqeerfjskdvocvqldmrssnprct67pw5ky2zrspgsssqalc7u";
+        MemeToken token = new MemeToken(deployerAddress, name, symbol, uri);
+        console.log("token deployed to %s", address(token));
 
         vm.stopBroadcast();
     }
