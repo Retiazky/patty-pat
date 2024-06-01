@@ -11,25 +11,28 @@
         <span>{{ address }}</span>
       </div>
       <trades-table-card :transfers="transfers" :profile-view="true" />
-      <tokens-card />
+      <tokens-card :tokens="tokens" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useAccount } from '@wagmi/vue';
-import type { Transfer } from '~/types';
+import type { Token, Transfer } from '~/types';
 const { address } = useAccount();
 
 const transfers = ref<Transfer[]>([]);
+const tokens = ref<Token[]>([]);
 
 onMounted(async () => {
   if (!address.value) return;
   const params = new URLSearchParams();
   params.append('address', address.value);
   const trans: Transfer[] = await $fetch('/api/transfer?' + params.toString());
-  console.log(trans);
   transfers.value = trans;
+
+  const toks: Token[] = await $fetch('/api/token?' + params.toString());
+  tokens.value = toks;
 });
 </script>
 

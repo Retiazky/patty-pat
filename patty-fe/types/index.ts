@@ -32,3 +32,12 @@ export type Transfer = {
   date: string;
   transaction: string;
 };
+
+export type Token = {
+  id: string;
+  symbol: string;
+  amount: number;
+  meta: {
+    image: string;
+  };
+};

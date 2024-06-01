@@ -1,4 +1,4 @@
-import type { Transfer } from '~/types';
+import type { Token, Transfer } from '~/types';
 
 export function useTransferService() {
   const transfers: Transfer[] = [
@@ -37,6 +37,57 @@ export function useTransferService() {
     },
   ];
 
+  const tokens: Token[] = [
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+    {
+      id: '1',
+      symbol: 'CAT',
+      amount: 1.0002,
+      meta: {
+        image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      },
+    },
+  ];
+
   const getTransfersById = (id: string) => {
     return transfers.filter((transfer) => transfer.fundingId === id);
   };
@@ -46,18 +97,6 @@ export function useTransferService() {
   };
 
   const getTokensByAddress = (address: string) => {
-    const tokens: Record<string, number> = {};
-
-    transfers.forEach((transfer) => {
-      if (transfer.account === address) {
-        if (tokens[transfer.tokenSymbol]) {
-          tokens[transfer.tokenSymbol] += transfer.token;
-        } else {
-          tokens[transfer.tokenSymbol] = transfer.token;
-        }
-      }
-    });
-
     return tokens;
   };
 
