@@ -31,3 +31,14 @@ type TokenBalance @entity {
   amount: BigDecimal!
 }
 
+type TokenTransfer @entity {
+  id: ID!
+  token: Token
+  from: Bytes!
+  to: Bytes!
+  amount: BigDecimal!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+}
+
