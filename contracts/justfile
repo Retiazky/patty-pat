@@ -13,9 +13,12 @@ repl:
  chisel
 
 deploy:
-  @echo "DEPLOYING CONTRACT TO $RPC_URL, press CTRL+C to distrupt (10sec left)…"
+  @echo "DEPLOYING CONTRACT TO $TEST_RPC_URL, press CTRL+C to distrupt (10sec left)…"
   sleep 10
-  forge script script/PoolManager.s.sol:PoolManagerScript --rpc-url $RPC_URL --broadcast --verify -vvvv
+  forge script script/PatLP.s.sol:PatLPScript --evm-version cancun --rpc-url $TEST_RPC_URL --broadcast --verify -vvvv
 
 abi: build
   @jq '.abi' ./out/PoolManager.sol/PoolManager.json > pool.json
+
+verifyJson:
+  @forge verify-contract 0x61371311B35e3D7011dCDCc019935787FAeD4Eb5 lib/v4-core/src/test/PoolModifyLiquidityTest.sol:PoolModifyLiquidityTest --evm-version cancun --show-standard-json-input > verify.json
