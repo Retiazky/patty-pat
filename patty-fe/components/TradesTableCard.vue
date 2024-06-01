@@ -1,16 +1,20 @@
 <template>
   <s-card>
     <s-card-header>
-      <s-card-title>Transfers</s-card-title>
+      <s-card-title>{{ profileView ? 'My ' : '' }}Trades</s-card-title>
     </s-card-header>
     <s-card-content>
       <s-table>
         <s-table-header>
           <s-table-row class="hover:bg-transparent">
-            <s-table-head class="w-[100px]"> Account </s-table-head>
+            <s-table-head v-if="!profileView" class="w-[100px]">
+              Account
+            </s-table-head>
             <s-table-head>Type</s-table-head>
             <s-table-head>ETH</s-table-head>
-            <s-table-head> {{ tokenName }} </s-table-head>
+            <s-table-head>
+              {{ profileView ? 'Token' : transfers[0]?.tokenSymbol }}
+            </s-table-head>
             <s-table-head> Date </s-table-head>
             <s-table-head class="w-[100px]"> Transaction </s-table-head>
           </s-table-row>
@@ -21,7 +25,7 @@
             :key="transfer.id"
             class="hover:bg-accent/60"
           >
-            <s-table-cell class="truncate-cell"
+            <s-table-cell v-if="!profileView" class="truncate-cell"
               ><span
                 class="truncate hover:underline cursor-pointer"
                 @click="openAddressUrl(transfer.account)"
@@ -33,7 +37,10 @@
               transfer.type
             }}</s-table-cell>
             <s-table-cell>{{ transfer.eth }}</s-table-cell>
-            <s-table-cell>{{ transfer.token }}</s-table-cell>
+            <s-table-cell
+              >{{ transfer.token }}
+              {{ profileView && transfer.tokenSymbol }}</s-table-cell
+            >
             <s-table-cell>{{ transfer.date }}</s-table-cell>
             <s-table-cell class="truncate-cell"
               ><span
@@ -54,17 +61,9 @@
 import type { Transfer } from '~/types';
 
 defineProps<{
-  tokenName: string | undefined;
+  transfers: Transfer[];
+  profileView?: boolean;
 }>();
-
-const { params } = useRoute();
-const fundingId = params.id as string;
-const transfers = ref<Transfer[]>([]);
-
-onMounted(async () => {
-  const data: Transfer[] = await $fetch('/api/transfer/' + fundingId);
-  transfers.value = data;
-});
 
 const getTypeTextColor = (type: string) => {
   if (type === 'buy') return 'text-green-500';
