@@ -31,5 +31,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     supabaseKey: "",
     supabaseUrl: "",
+    graphqlUrl: "",
+    public: {
+      supabaseUrl: "",
+    },
   },
 });

@@ -10,10 +10,7 @@
           :key="token.id"
           class="flex flex-col items-center"
         >
-          <img
-            :src="token.meta.image"
-            class="w-24 h-24 border-2 border-accent rounded"
-          />
+          <token-image :token="token" />
           <span>{{ token.amount }} {{ token.symbol }}</span>
         </div>
       </div>
@@ -22,10 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { Token } from '~/types';
+import type { Token } from "~/types";
 defineProps<{
   tokens: Token[];
 }>();
 </script>
-
-<style></style>

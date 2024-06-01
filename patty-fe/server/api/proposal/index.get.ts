@@ -1,4 +1,4 @@
-import { useProposalService } from '../../services';
+import { useProposalService } from "../../services";
 
 export default defineEventHandler(async (event) => {
   const service = useProposalService();

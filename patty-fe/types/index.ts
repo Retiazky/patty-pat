@@ -1,3 +1,5 @@
+import type { Address } from "viem";
+
 export interface GraphQLResponse<T> {
   data: T;
 }
@@ -5,16 +7,19 @@ export interface GraphQLResponse<T> {
 export type Proposal = {
   id: string;
   title: string;
+  symbol: string;
   description: string;
-  imageSrc: string;
-  endingDateTime: string;
-  minAmount: number;
+  meta: string;
+  executed: boolean;
+  endingDateTime: number;
+  targets: Address[];
+  values: string[];
+  calldatas: string[];
   votes: {
-    votesFor: number;
-    votesAgainst: number;
-    votesAbstain: number;
+    for: number;
+    against: number;
+    abstain: number;
   };
-  creator: string;
 };
 
 export type Funding = {
@@ -22,15 +27,15 @@ export type Funding = {
   title: string;
   imageSrc: string;
   description: string;
-  tokenName: string;
-  tokenSymbol: string;
+  name: string;
+  symbol: string;
 };
 
 export type Transfer = {
   id: string;
   fundingId: string;
   account: string;
-  type: 'buy' | 'sell';
+  type: "buy" | "sell";
   eth: number;
   token: number;
   tokenSymbol: string;
@@ -42,7 +47,5 @@ export type Token = {
   id: string;
   symbol: string;
   amount: number;
-  meta: {
-    image: string;
-  };
+  meta?: string;
 };
