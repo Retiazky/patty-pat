@@ -1,0 +1,22 @@
+set dotenv-load
+
+build: 
+  forge build
+
+test:
+  forge test -vv
+
+format:
+  forge fmt
+
+repl:
+ chisel
+
+deploy:
+  @echo "DEPLOYING CONTRACT TO $RPC_URL, press CTRL+C to distrupt (10sec left)…"
+  sleep 10
+  forge script script/PoolManager.s.sol:PoolManagerScript --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+abi:
+  @forge build --silent
+  @jq '.abi' ./out/Generative.sol/Generative.json > generative.json
