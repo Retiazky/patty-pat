@@ -12,6 +12,8 @@ import {StateLibrary} from "@v4-core/libraries/StateLibrary.sol";
 import {MemeToken} from "src/MemeToken.sol";
 import {PoolManager} from "@v4-core/PoolManager.sol";
 import {PoolId, PoolIdLibrary} from "@v4-core/types/PoolId.sol";
+import {PoolSwapTest} from "@v4-core/test/PoolSwapTest.sol";
+import {TickMath} from "@v4-core/libraries/TickMath.sol";
 
 contract PatTest is Test {
     PoolModifyLiquidityTest public lpRouter;
@@ -65,6 +67,11 @@ contract PatTest is Test {
         int24 tickUpper = 600;
         int256 liquidityDelta = 10e18;
 
+        uint160 MIN_PRICE_LIMIT = TickMath.MIN_SQRT_PRICE + 1;
+        uint160 MAX_PRICE_LIMIT = TickMath.MAX_SQRT_PRICE - 1;
+
+        PoolSwapTest swapRouter = PoolSwapTest(vm.addr(1));
+
         vm.prank(vm.addr(1));
         lpRouter.modifyLiquidity{ value: 1 ether }(
             poolKey,
@@ -78,15 +85,27 @@ contract PatTest is Test {
         );
 
         // Convert PoolKey to PoolId using StateLibrary
-        uint128 liquidityAmount = manager.getPosition(
-            poolId,
-            address(this),
-            tickLower,
-            tickUpper,
-            0 // Assuming salt is 0
-        ).liquidity;
+//        uint128 liquidityAmount = manager.getPosition(
+//            poolId,
+//            vm.addr(1),
+//            tickLower,
+//            tickUpper,
+//            0 // Assuming salt is 0
+//        ).liquidity;
 
-        console.log("liquidityAmount: %s", liquidityAmount);
+        bool zeroForOne = true;
+        IPoolManager.SwapParams memory params = IPoolManager.SwapParams({
+            zeroForOne: zeroForOne,
+            amountSpecified: -1e18,
+            sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT // unlimited impact
+        });
+        PoolSwapTest.TestSettings memory testSettings =
+            PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false});
+
+        bytes memory hookData = new bytes(0);
+        swapRouter.swap(poolKey, params, testSettings, hookData);
+
+//        console.log("swapRouter: %s", );
 
        // assert(liquidityAmount > 0);
     }
