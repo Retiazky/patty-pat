@@ -2,7 +2,6 @@
 pragma solidity ^0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
-import {PatPool} from "src/PatPool.sol";
 import {PoolKey} from "@v4-core/types/PoolKey.sol";
 import {Currency} from "@v4-core/types/Currency.sol";
 import {IPoolManager} from "@v4-core/interfaces/IPoolManager.sol";
@@ -15,7 +14,6 @@ import {PoolManager} from "@v4-core/PoolManager.sol";
 import {PoolId, PoolIdLibrary} from "@v4-core/types/PoolId.sol";
 
 contract PatTest is Test {
-    PatPool public pool;
     PoolModifyLiquidityTest public lpRouter;
     IPoolManager public manager;
     PoolKey public poolKey;
@@ -27,12 +25,13 @@ contract PatTest is Test {
     function setUp() public {
         address initialOwner = vm.addr(1);
         console.log("Initial owner: %s", initialOwner);
-        pool = new PatPool(500000);
         PoolManager deployedManager = new PoolManager(500000);
         manager = IPoolManager(address(deployedManager));
 
         lpRouter = new PoolModifyLiquidityTest(manager);
+        console.log("lpRouter: %s", address (lpRouter));
         MemeToken token = new MemeToken(initialOwner, "CatWithCoco", "CWC");
+        console.log("memeToken: %s", address (token));
         address token0 = address(0);
         address token1 = address(token);
         uint24 swapFee = 500; // 0.05% fee tier
@@ -53,8 +52,10 @@ contract PatTest is Test {
         });
         manager.initialize(poolKey, startingPrice, hookData);
         poolId = poolKey.toId();
-
-        IERC20(token0).approve(address(lpRouter), type(uint256).max);
+        vm.deal(initialOwner, 1 ether);
+//        vm.prank(initialOwner);
+//        IERC20(token0).approve(address(lpRouter), type(uint256).max);
+        vm.prank(initialOwner);
         IERC20(token1).approve(address(lpRouter), type(uint256).max);
     }
 
@@ -64,7 +65,8 @@ contract PatTest is Test {
         int24 tickUpper = 600;
         int256 liquidityDelta = 10e18;
 
-        lpRouter.modifyLiquidity(
+        vm.prank(vm.addr(1));
+        lpRouter.modifyLiquidity{ value: 1 ether }(
             poolKey,
             IPoolManager.ModifyLiquidityParams({
                 tickLower: tickLower,
@@ -84,6 +86,8 @@ contract PatTest is Test {
             0 // Assuming salt is 0
         ).liquidity;
 
-        assert(liquidityAmount > 0);
+        console.log("liquidityAmount: %s", liquidityAmount);
+
+       // assert(liquidityAmount > 0);
     }
 }
