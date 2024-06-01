@@ -7,9 +7,19 @@ struct Campaign {
     string symbol;
     string uri;
     uint256 supply;
+    address feeRecipient;
 }
 
-event CampaingCreated(string name, string symbol, string uri, uint256 supply, address token, address feeRecipient);
+event CampaingCreated(
+    string name,
+    string symbol,
+    string uri,
+    uint256 supply,
+    address token,
+    address feeRecipient
+);
+
+event CampaignRemoved(address token);
 
 event BuybackCreated(address token, uint256 amountIn, uint256 amountOut);
 
@@ -22,5 +32,9 @@ interface IPatDAO {
         uint256 supply
     ) external;
 
-    function createBuyback(address token, uint256 amountIn, uint256 amountOut) external;
+    function createBuyback(
+        address token,
+        uint256 amountIn,
+        uint256 amountOut
+    ) external;
 }
