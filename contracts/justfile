@@ -1,10 +1,10 @@
 set dotenv-load
 
 build: 
-  forge build
+  @forge build --evm-version cancun --silent
 
 test:
-  forge test -vv
+  forge test --evm-version cancun -vv
 
 format:
   forge fmt
@@ -17,6 +17,5 @@ deploy:
   sleep 10
   forge script script/PoolManager.s.sol:PoolManagerScript --rpc-url $RPC_URL --broadcast --verify -vvvv
 
-abi:
-  @forge build --silent
-  @jq '.abi' ./out/Generative.sol/Generative.json > generative.json
+abi: build
+  @jq '.abi' ./out/PoolManager.sol/PoolManager.json > pool.json
