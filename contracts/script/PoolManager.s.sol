@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
@@ -10,11 +10,11 @@ contract PoolManagerScript is Script {
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address deployerAddress = vm.addr(deployerPrivateKey);
+        // address deployerAddress = vm.addr(deployerPrivateKey);
         vm.startBroadcast(deployerPrivateKey);
 
         PoolManager manager = new PoolManager(500000);
-        console.log("PoolManager deployed to %s", PoolManager(manager));
+        // console.log("PoolManager deployed to %s", PoolManager(manager));
 
         vm.stopBroadcast();
     }
