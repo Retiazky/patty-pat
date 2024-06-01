@@ -13,8 +13,11 @@
 </template>
 <script setup lang="ts">
 import type { Proposal } from '~/types';
-import { useProposalService } from '~/server/services';
 
-const service = useProposalService();
-const proposals: Proposal[] = service.getProposals();
+const proposals = ref<Proposal[]>([]);
+
+onMounted(async () => {
+  const data: Proposal[] = await $fetch('/api/proposal/');
+  proposals.value = data;
+});
 </script>

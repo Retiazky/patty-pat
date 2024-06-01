@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nuxt/eslint": "^0.3.12",
+    "@supabase/supabase-js": "^2.43.4",
     "@tanstack/vue-query": "^5.35.2",
     "@vee-validate/zod": "^4.12.8",
     "@vueuse/core": "^10.9.0",

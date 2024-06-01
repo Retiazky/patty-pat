@@ -1,0 +1,21 @@
+set dotenv-load
+
+build: 
+  @forge build --evm-version cancun --silent
+
+test:
+  forge test --evm-version cancun -vv
+
+format:
+  forge fmt
+
+repl:
+ chisel
+
+deploy:
+  @echo "DEPLOYING CONTRACT TO $RPC_URL, press CTRL+C to distrupt (10sec left)…"
+  sleep 10
+  forge script script/PoolManager.s.sol:PoolManagerScript --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+abi: build
+  @jq '.abi' ./out/PoolManager.sol/PoolManager.json > pool.json

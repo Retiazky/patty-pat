@@ -27,4 +27,9 @@ export default defineNuxtConfig({
   tradingview: {
     prefix: "tv",
   },
+
+  runtimeConfig: {
+    supabaseKey: "",
+    supabaseUrl: "",
+  },
 });

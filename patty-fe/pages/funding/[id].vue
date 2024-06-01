@@ -8,9 +8,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useFundingService } from '~/server/services';
-
-const service = useFundingService();
+import type { Funding } from '~/types';
 const { params } = useRoute();
-const funding = service.getFundingById(params.id as string);
+
+const funding = ref<Funding | null>(null);
+
+onMounted(async () => {
+  const data: Funding = await $fetch('/api/funding/' + params.id);
+  funding.value = data;
+});
 </script>
