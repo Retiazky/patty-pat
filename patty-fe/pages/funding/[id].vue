@@ -1,21 +1,29 @@
 <template>
   <div class="flex flex-col gap-10">
-    <trading-card :name="funding?.name" :symbol="funding?.symbol" />
+    <trading-card
+      :address="id"
+      :name="funding?.name"
+      :symbol="funding?.symbol"
+    />
     <trades-table-card :transfers="transfers" />
   </div>
 </template>
 <script setup lang="ts">
 import type { Funding, Transfer } from "~/types";
-const { params } = useRoute();
+const route = useRoute();
 
 const funding = ref<Funding | null>(null);
 const transfers = ref<Transfer[]>([]);
 
+const id = computed(() => route.params.id);
+
 onMounted(async () => {
-  const fun: Funding = await $fetch("/api/funding/" + params.id);
+  if (!route.params.id) return;
+  const id = route.params.id;
+  const fun: Funding = await $fetch("/api/funding/" + id);
   funding.value = fun;
 
-  const trans: Transfer[] = await $fetch("/api/transfer/" + fun.id);
+  const trans: Transfer[] = await $fetch("/api/transfer/" + id);
   transfers.value = trans;
 });
 </script>
