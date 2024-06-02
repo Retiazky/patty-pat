@@ -57,8 +57,6 @@ contract PatDAO is IPatDAO {
         address feeRecipient,
         uint256 supply
     ) public onlyGovernance {
-        // TODO: Implement
-
 //        manager = IPoolManager(address(0x43E62b5c46884f439d4d2b7c3f47fBAff06D0551));
         manager = IPoolManager(managerAddress);
 
@@ -105,7 +103,7 @@ contract PatDAO is IPatDAO {
         emit CampaingCreated(name, symbol, uri, supply, token1, address(0));
     }
 
-    function provideLiquidity(address _token,uint160 _startingPrice,bytes memory _hookData) public onlyGovernance {
+    function provideLiquidity(address _token,uint160 _startingPrice,bytes memory _hookData) public payable onlyGovernance {
         address token = _token;
         uint160 startingPrice = _startingPrice;
         bytes memory hookData = _hookData;
