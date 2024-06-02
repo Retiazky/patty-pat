@@ -46,6 +46,10 @@ contract PatDAO is IPatDAO {
     //     _;
     // }
 
+    function setLPRouter(address _lpRouter) public onlyGovernance{
+        lpRouter = PoolModifyLiquidityTest(_lpRouter);
+    }
+
     function createCampaign(
         string memory name,
         string memory symbol,
@@ -57,8 +61,6 @@ contract PatDAO is IPatDAO {
 
 //        manager = IPoolManager(address(0x43E62b5c46884f439d4d2b7c3f47fBAff06D0551));
         manager = IPoolManager(managerAddress);
-        //TODO: fix
-        lpRouter = new PoolModifyLiquidityTest(manager);
 
         MemeToken token = new MemeToken(governanceSC, name, symbol, "/");
 
