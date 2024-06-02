@@ -2,11 +2,14 @@
 pragma solidity ^0.8.20;
 
 import {IPatDAO, Campaign, CampaingCreated, BuybackCreated} from "./interfaces/IPatDAO.sol";
+import {IPatToken} from "./interfaces/IPatToken.sol";
+import {IPatGovernor} from "./interfaces/IPatGovernor.sol";
 
 contract PatDAO is IPatDAO {
     address public governanceSC;
     mapping(address => Campaign) public campaigns;
 
+    uint256 public exchangeRateGovernanceToken;
     error CampaignAlreadyCreated(address who, address token);
 
     constructor(address GovernanceSC) {
@@ -14,7 +17,10 @@ contract PatDAO is IPatDAO {
     }
 
     modifier onlyGovernance() {
-        require(msg.sender == governanceSC, "PatDAO: Only Governance can call this function");
+        require(
+            msg.sender == governanceSC,
+            "PatDAO: Only Governance can call this function"
+        );
         _;
     }
 
@@ -35,7 +41,20 @@ contract PatDAO is IPatDAO {
         emit CampaingCreated(name, symbol, uri, supply, token, feeRecipient);
     }
 
-    function createBuyback(address token, uint256 amountIn, uint256 amountOut) public onlyGovernance {
+    function swapForGovernanceToken(address token, uint256 amountIn) public {
+        require(campaigns[token].supply > 0, "PatDAO: Campaign does not exist");
+        uint256 exchangeRate = campaigns[token].supply /
+            exchangeRateGovernanceToken;
+        uint256 amountOut = amountIn * exchangeRate;
+        address IPatTokenAddress = IPatGovernor(governanceSC).token();
+        IPatToken(IPatTokenAddress).mint(msg.sender, amountOut);
+    }
+
+    function createBuyback(
+        address token,
+        uint256 amountIn,
+        uint256 amountOut
+    ) public onlyGovernance {
         // TODO: Implement
         emit BuybackCreated(token, amountIn, amountOut);
     }
