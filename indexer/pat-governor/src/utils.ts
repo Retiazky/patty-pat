@@ -1,6 +1,6 @@
 //import smart contract class from generated files
 import { ERC20 } from "../generated/Token/ERC20";
-import { PAT_TOKEN, DAO_ADDRESS } from "./constansts";
+import { PAT_TOKEN, DAO_ADDRESS, MEME_TOKEN } from "./constansts";
 //import entities
 import { Token } from "../generated/schema";
 //import datatypes
@@ -23,7 +23,7 @@ export function fetchTokenDetails(event: ethereum.Event): Token | null {
 		return token;
 	}
 
-	if (owner.value != Address.fromString(DAO_ADDRESS) && event.address.toHex().toLowerCase() != PAT_TOKEN) {
+	if (owner.value != Address.fromString(DAO_ADDRESS) && event.address.toHex().toLowerCase() != PAT_TOKEN && event.address.toHex().toLowerCase() != MEME_TOKEN) {
 		token.symbol = event.address.toHex();
 		token.save();
 		return token;

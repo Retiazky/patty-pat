@@ -14,7 +14,11 @@
               <s-form-item class="w-full">
                 <s-form-label>Amount</s-form-label>
                 <s-form-control>
-                  <s-input v-bind="componentField" />
+                  <s-input
+                    type="number"
+                    step="0.0001"
+                    v-bind="componentField"
+                  />
                 </s-form-control>
                 <s-form-description> ETH </s-form-description>
                 <s-form-message />
@@ -58,6 +62,7 @@
 
 <script lang="ts" setup>
 import { toTypedSchema } from "@vee-validate/zod";
+import { useWriteContract } from "@wagmi/vue";
 import {
   LineStyle,
   PriceScaleMode,
@@ -66,11 +71,15 @@ import {
   type Time,
 } from "lightweight-charts";
 import { useForm } from "vee-validate";
+import { parseEther, type Address } from "viem";
 import * as z from "zod";
+import { config } from "~/plugins/1.wagmi";
+import { patSwapContract } from "~/utils/contracts/PatSwapContract";
 
-defineProps<{
+const props = defineProps<{
   name: string | undefined;
   symbol: string | undefined;
+  address: string | undefined;
 }>();
 
 const direction = ref("down");
@@ -90,10 +99,36 @@ const { handleSubmit } = useForm({
   },
 });
 
-const onSubmit = handleSubmit((values) => {
+const { writeContractAsync } = useWriteContract({ config });
+
+const onSubmit = handleSubmit(async (values) => {
   console.log(values);
+  const _amount = parseEther(String(values.amount));
+  const _poolKey = {
+    currency0: "0x0000000000000000000000000000000000000000" as Address,
+    currency1: props.address as Address,
+    fee: 0,
+    tickSpacing: 1,
+    hooks: "0x0000000000000000000000000000000000000000" as Address,
+  };
+  const _minPriceLimit = BigInt(4295128739 - 1);
+  const _params = {
+    zeroForOne: true,
+    amountSpecified: _amount * -1n,
+    sqrtPriceLimitX96: _minPriceLimit,
+  };
+  const _settings = { settleUsingBurn: true, takeClaims: true };
+  const _hooks = "0x0" as Address;
+  console.log(_amount, _poolKey, _params, _settings, _hooks);
+  await writeContractAsync({
+    ...patSwapContract,
+    functionName: "swap",
+    value: _amount,
+    args: [_poolKey, _params, _settings, _hooks],
+  });
 });
 
+// Chart Options
 const chartOptions: Partial<ChartOptions> = {
   autoSize: true,
   leftPriceScale: {
@@ -126,24 +161,28 @@ const chartOptions: Partial<ChartOptions> = {
   },
 };
 
-function generateSampleData(): CandlestickData[] {
-  const randomFactor = 25 + Math.random() * 25;
-  function samplePoint(i: number) {
-    return (
-      i *
-        (0.5 +
-          Math.sin(i / 10) * 0.2 +
-          Math.sin(i / 20) * 0.4 +
-          Math.sin(i / randomFactor) * 0.8 +
-          Math.sin(i / 500) * 0.5) +
-      200
-    );
-  }
+// Chart DATA
 
+const date = new Date(Date.UTC(2018, 0, 1, 0, 0, 0, 0));
+let i = 0;
+
+const randomFactor = 25 + Math.random() * 25;
+const samplePoint = (i: number) => {
+  return (
+    i *
+      (0.5 +
+        Math.sin(i / 10) * 0.2 +
+        Math.sin(i / 20) * 0.4 +
+        Math.sin(i / randomFactor) * 0.8 +
+        Math.sin(i / 500) * 0.5) +
+    200
+  );
+};
+
+function generateSampleData(): CandlestickData[] {
   const res: CandlestickData[] = [];
-  const date = new Date(Date.UTC(2018, 0, 1, 0, 0, 0, 0));
   const numberOfPoints = 100;
-  for (let i = 0; i < numberOfPoints; ++i) {
+  for (i = 0; i < numberOfPoints; ++i) {
     const time = date.getTime() / 1000;
     const value = samplePoint(i);
 
@@ -166,6 +205,28 @@ function generateSampleData(): CandlestickData[] {
 }
 
 const data = ref(generateSampleData());
+
+setInterval(() => {
+  const time = date.getTime() / 1000;
+  const value = samplePoint(i);
+
+  const randomRanges = [-1 * Math.random(), Math.random(), Math.random()].map(
+    (i) => i * 10
+  );
+  const sign = Math.sin(Math.random() - 0.5);
+  const _data = data.value;
+  _data.push({
+    time: time as Time,
+    low: value + randomRanges[0],
+    high: value + randomRanges[1],
+    open: value + sign * randomRanges[2],
+    close: samplePoint(i + 1),
+  });
+
+  date.setUTCDate(date.getUTCDate() + 1);
+  data.value = [..._data];
+  i++;
+}, 1000);
 </script>
 
 <style></style>

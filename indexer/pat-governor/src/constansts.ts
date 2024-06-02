@@ -1,2 +1,3 @@
 export const DAO_ADDRESS = "0x9faadc839130fa7a7aeb28a881b58175930585c9";
 export const PAT_TOKEN = "0xb17c316f9fc551211f3086bb24f047f50ae35af5"
+export const MEME_TOKEN = "0x8BD40d6b2800F221e7fd48Fe9Eea9ffB734b4463"
