@@ -1,7 +1,11 @@
 <template>
   <s-card>
-    <s-card-header>
+    <s-card-header class="flex flex-row justify-between items-center">
       <s-card-title>My Tokens</s-card-title>
+      <modal-governance-swap
+        v-if="filteredTokens.length > 0"
+        :tokens="filteredTokens"
+      />
     </s-card-header>
     <s-card-content>
       <div class="grid grid-cols-4 gap-y-10">
@@ -20,7 +24,11 @@
 
 <script lang="ts" setup>
 import type { Token } from "~/types";
-defineProps<{
+const props = defineProps<{
   tokens: Token[];
 }>();
+
+const filteredTokens = computed(() =>
+  props.tokens.filter((t) => t.symbol !== "PAT")
+);
 </script>
