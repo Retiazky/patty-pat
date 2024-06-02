@@ -26,8 +26,8 @@ contract SteadyPatScript is Script {
         console.log("Deployer address: %s", deployerAddress);
         vm.startBroadcast(deployerPrivateKey);
         IPoolManager manager = IPoolManager(address(0x43E62b5c46884f439d4d2b7c3f47fBAff06D0551));
-        PoolModifyLiquidityTest lp = PoolModifyLiquidityTest(0x61371311B35e3D7011dCDCc019935787FAeD4Eb5);
-        address token1 = 0x8BD40d6b2800F221e7fd48Fe9Eea9ffB734b4463;
+        PoolModifyLiquidityTest lp = PoolModifyLiquidityTest(address(0x61371311B35e3D7011dCDCc019935787FAeD4Eb5));
+        address token1 = address(0x8BD40d6b2800F221e7fd48Fe9Eea9ffB734b4463);
         
 
         poolKey = PoolKey({
@@ -43,6 +43,8 @@ contract SteadyPatScript is Script {
 
         manager.initialize(poolKey, startingPrice, hookData);
 
+        // ends here
+
         IERC20(token1).approve(address(lp), type(uint256).max);
 
         console.log("PoolModifyLiquidityTest deployed to %s", address(lp));
@@ -51,7 +53,7 @@ contract SteadyPatScript is Script {
         int24 tickUpper = 0;
         int256 liquidityDelta = 10e18;
 
-        BalanceDelta result = lpRouter.modifyLiquidity{value: 0.00001 ether}(
+        BalanceDelta result = lp.modifyLiquidity(
             poolKey,
             IPoolManager.ModifyLiquidityParams({
                 tickLower: tickLower,
