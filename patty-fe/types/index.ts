@@ -9,6 +9,7 @@ export type Proposal = {
   title: string;
   symbol: string;
   description: string;
+  totalSupply: number;
   meta: string;
   executed: boolean;
   endingDateTime: number;

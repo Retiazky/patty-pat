@@ -32,3 +32,9 @@ export const queryByAddress = `query GetProposals($address: String!) {
     voteStart
   }
 }`;
+
+export const queryGovernanceTokenTotalSupply = `query GetGovernanceTokenTotalSupply {
+  tokens(where: {symbol: "PAT"}) {
+    totalSupply
+  }
+}`;

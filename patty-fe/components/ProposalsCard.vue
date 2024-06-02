@@ -37,14 +37,15 @@
               >
                 Execute
               </s-button>
+              <p v-else-if="!isAccepted(proposal)">Not accepted</p>
+              <p v-else-if="!enoughVotes(proposal)">Not enough votes</p>
               <s-button
-                v-else-if="isAccepted(proposal)"
+                v-else
                 variant="success"
                 @click="executeProposal(proposal)"
               >
                 Execute
               </s-button>
-              <p v-else>Rejected</p>
             </s-table-cell>
           </s-table-row>
         </s-table-body>
@@ -64,6 +65,10 @@ import { formatDate } from "~/utils/helpers/date";
 defineProps<{
   proposals: Proposal[];
 }>();
+
+const enoughVotes = (proposal: Proposal) => {
+  return proposal.votes.for > proposal.totalSupply / 100;
+};
 
 const isAccepted = (proposal: Proposal) => {
   return proposal.votes.for > proposal.votes.against;

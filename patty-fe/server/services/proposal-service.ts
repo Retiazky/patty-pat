@@ -1,6 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { decodeFunctionData, type Address } from "viem";
-import proposalQuery, { queryByAddress } from "~/server/queries/proposal";
+import proposalQuery, {
+  queryByAddress,
+  queryGovernanceTokenTotalSupply,
+} from "~/server/queries/proposal";
 import type { GraphQLResponse, Proposal } from "~/types";
 import { patDAOContract } from "~/utils/contracts/PatDAOContract";
 
@@ -38,6 +41,25 @@ export function useProposalService() {
         }),
       }
     );
+    type RawTotalSupply = {
+      totalSupply: string;
+    };
+
+    const resp2 = await $fetch<GraphQLResponse<{ tokens: RawTotalSupply[] }>>(
+      RUNTIME_CONFIG.graphqlUrl,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: queryGovernanceTokenTotalSupply,
+        }),
+      }
+    );
+
+    const totalSupply = Number(resp2.data.tokens[0].totalSupply) / 10 ** 18;
+
     const proposals: Proposal[] = [];
     resp.data.proposals.forEach((rawProposal) => {
       const data = decodeFunctionData({
@@ -51,6 +73,7 @@ export function useProposalService() {
           id: rawProposal.id,
           title: name,
           symbol,
+          totalSupply,
           executed: rawProposal.executed,
           description: rawProposal.description,
           targets: rawProposal.targets as Address[],
