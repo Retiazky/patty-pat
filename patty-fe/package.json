@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@kodadot1/minipfs": "0.4.3-rc.2",
     "@nuxt/eslint": "^0.3.12",
     "@supabase/supabase-js": "^2.43.4",
     "@tanstack/vue-query": "^5.35.2",

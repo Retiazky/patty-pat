@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-10">
     <trading-card
-      :address="id"
+      :address="address"
       :name="funding?.name"
       :symbol="funding?.symbol"
     />
@@ -15,7 +15,7 @@ const route = useRoute();
 const funding = ref<Funding | null>(null);
 const transfers = ref<Transfer[]>([]);
 
-const id = computed(() => route.params.id);
+const address = computed(() => route.params.id as string);
 
 onMounted(async () => {
   if (!route.params.id) return;

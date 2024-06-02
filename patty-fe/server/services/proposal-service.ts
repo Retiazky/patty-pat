@@ -93,7 +93,10 @@ export function useProposalService() {
     return proposals;
   };
 
-  const saveImage = async (blob: Blob): Promise<string> => {
+  const saveImage = async (
+    blob: Blob,
+    description: string
+  ): Promise<string> => {
     const supabase = createClient(
       RUNTIME_CONFIG.supabaseUrl,
       RUNTIME_CONFIG.supabaseKey
@@ -104,7 +107,7 @@ export function useProposalService() {
 
     const path = `${RUNTIME_CONFIG.supabaseUrl}/storage/v1/object/public/images/${uniqueId}.png`;
 
-    const json = JSON.stringify({ image: path });
+    const json = JSON.stringify({ image: path, description });
     await supabase.storage.from("json").upload(`${uniqueId}.json`, json);
 
     const jsonPath = `${RUNTIME_CONFIG.supabaseUrl}/storage/v1/object/public/json/${uniqueId}.json`;

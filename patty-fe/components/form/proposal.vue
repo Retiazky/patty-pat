@@ -126,10 +126,12 @@ const { address } = useAccount();
 const onSubmit = handleSubmit(async (values) => {
   const fd = new FormData();
   fd.append("image", values.image as Blob);
+  fd.append("description", values.description);
   const _jsonPath = await $fetch("/api/proposal/image", {
     method: "POST",
     body: fd,
   });
+
   const _name = values.title;
   const _symbol = values.symbol;
   const _description = values.description;

@@ -4,9 +4,9 @@
       <s-card-title>{{ funding.title }}</s-card-title>
     </s-card-header>
     <s-card-content>
-      <p>{{ funding.description }}</p>
+      <p class="mb-2">{{ description }}</p>
       <div class="flex justify-center items-center">
-        <img class="w-1/2 h-1/2 rounded-lg" :src="funding.imageSrc" />
+        <img v-if="imgSrc" class="w-1/2 h-1/2 rounded-lg" :src="imgSrc" />
       </div>
     </s-card-content>
     <s-card-footer class="flex">
@@ -20,8 +20,29 @@
   </s-card>
 </template>
 <script setup lang="ts">
-import type { Funding } from '~/types';
-defineProps<{
+import { $purifyOne } from "@kodadot1/minipfs";
+import type { Funding } from "~/types";
+const props = defineProps<{
   funding: Funding;
 }>();
+
+const imgSrc = ref<string | null>(null);
+const description = ref<string | null>(null);
+
+onMounted(async () => {
+  if (props.funding.imageSrc.startsWith("ipfs://")) {
+    const path = $purifyOne(props.funding.imageSrc, "nftstorage");
+    const meta = await $fetch<{ image: string; description: string }>(path);
+    const pureImage = $purifyOne(meta.image, "dweb");
+    imgSrc.value = pureImage;
+    description.value = meta.description;
+  } else if (props.funding.imageSrc.startsWith("http")) {
+    console.log("Img src:", props.funding);
+    const rawMeta = await $fetch<string>(props.funding.imageSrc);
+    console.log(rawMeta);
+    const meta = JSON.parse(rawMeta);
+    imgSrc.value = meta.image;
+    description.value = meta.description;
+  }
+});
 </script>

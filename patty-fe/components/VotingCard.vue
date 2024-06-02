@@ -7,7 +7,7 @@
       </s-card-description>
     </s-card-header>
     <s-card-content>
-      <p>{{ proposal.description }}</p>
+      <p>{{ description }}</p>
       <p>Symbol: {{ proposal.symbol }}</p>
       <div class="flex justify-center items-center">
         <img v-if="imgSrc" class="w-1/2 h-1/2 rounded-lg" :src="imgSrc" />
@@ -88,10 +88,12 @@ const isAfterDeadline = computed(() => {
 });
 
 const imgSrc = ref<string | null>(null);
+const description = ref<string | null>(null);
 
 onMounted(async () => {
   const metaRaw = await $fetch<string>(props.proposal.meta);
-  const meta: { image: string } = JSON.parse(metaRaw);
-  imgSrc.value = meta.image;
+  const meta: { image?: string; description?: string } = JSON.parse(metaRaw);
+  imgSrc.value = meta.image ?? null;
+  description.value = meta.description ?? null;
 });
 </script>
