@@ -16,7 +16,7 @@ contract MemeTokenTest is Test {
     function testSupply() public {
         assertEq(
             token.totalSupply(),
-            10000000000000000 * 10 ** token.decimals()
+            1e18 * 10 ** token.decimals()
         );
     }
 }

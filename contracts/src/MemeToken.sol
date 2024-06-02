@@ -23,7 +23,7 @@ contract MemeToken is
         string memory uri_
     ) ERC20(name_, symbol_) Ownable(initialOwner) ERC20Permit(name_) {
         _tokenURI = uri_;
-        _mint(initialOwner, 10000000000000000 * 10 ** decimals());
+        _mint(initialOwner, 1e18 * 10 ** decimals());
     }
 
     function pause() public onlyOwner {
